@@ -10,9 +10,47 @@ import org.w3c.dom.Text;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int productid;
+    private Integer productId;
     private String productname;
-    private int quantity;
+    private Integer quantity;
     private double price;
-    private Text description;
+
+    public Product(Integer productId, String productname, Integer quantity, double price) {
+        this.productId = productId;
+        this.productname = productname;
+        this.quantity = quantity;
+        this.price = price;
+    }
+
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public String getProductname() {
+        return productname;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setProductname(String productname) {
+        this.productname = productname;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
