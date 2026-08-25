@@ -1,0 +1,100 @@
+<div class="wms-card rack-card">
+  <div class="rack-header">
+    <div>
+      <h3 class="rack-title">High-Bay Rack & Shelf Cell Visualizer (Deposco Standard)</h3>
+      <p class="rack-subtitle">Real-time bin fill rates: Green (&lt;50%), Yellow (50–85%), Red (&gt;85%)</p>
+    </div>
+
+    <!-- Legend -->
+    <div class="fill-legend">
+      <span class="legend-badge leg-green">Optimal &lt;50%</span>
+      <span class="legend-badge leg-yellow">Balanced 50–85%</span>
+      <span class="legend-badge leg-red">Near Max &gt;85%</span>
+    </div>
+  </div>
+
+  <div class="rack-layout-grid">
+    <!-- Left: Rack Cell Grid -->
+    <div class="grid-side">
+      <div class="shelf-tier-label">LEVEL 3 (Top Overstock)</div>
+      <div class="bins-row">
+        @for (b of bins.slice(8, 12); track b.binCode) {
+          <div
+            class="bin-box {{ b.status.toLowerCase() }}"
+            [class.selected]="selectedBin()?.binCode === b.binCode"
+            (click)="onSelectBin(b)"
+          >
+            <span class="bin-num font-mono">{{ b.binCode.split('-').pop() }}</span>
+            <span class="bin-fill">{{ b.occupancyPercent }}%</span>
+            <span class="bin-sku">{{ b.sku }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="shelf-tier-label">LEVEL 2 (Secondary Storage)</div>
+      <div class="bins-row">
+        @for (b of bins.slice(4, 8); track b.binCode) {
+          <div
+            class="bin-box {{ b.status.toLowerCase() }}"
+            [class.selected]="selectedBin()?.binCode === b.binCode"
+            (click)="onSelectBin(b)"
+          >
+            <span class="bin-num font-mono">{{ b.binCode.split('-').pop() }}</span>
+            <span class="bin-fill">{{ b.occupancyPercent }}%</span>
+            <span class="bin-sku">{{ b.sku }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="shelf-tier-label">LEVEL 1 (Active Fast-Pick)</div>
+      <div class="bins-row">
+        @for (b of bins.slice(0, 4); track b.binCode) {
+          <div
+            class="bin-box {{ b.status.toLowerCase() }}"
+            [class.selected]="selectedBin()?.binCode === b.binCode"
+            (click)="onSelectBin(b)"
+          >
+            <span class="bin-num font-mono">{{ b.binCode.split('-').pop() }}</span>
+            <span class="bin-fill">{{ b.occupancyPercent }}%</span>
+            <span class="bin-sku">{{ b.sku }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right: Bin Inspector Slide-Over / Card -->
+    <div class="inspector-side">
+      @if (selectedBin()) {
+        <div class="bin-detail-card">
+          <div class="detail-header">
+            <span class="detail-code font-mono">{{ selectedBin()?.binCode }}</span>
+            <span class="badge {{ selectedBin()?.status === 'GREEN' ? 'badge-success' : selectedBin()?.status === 'YELLOW' ? 'badge-warning' : 'badge-danger' }}">
+              {{ selectedBin()?.occupancyPercent }}% Capacity
+            </span>
+          </div>
+
+          <div class="detail-sku-block">
+            <span class="sku-title">{{ selectedBin()?.sku }}</span>
+            <span class="batch-text font-mono">Batch: {{ selectedBin()?.batchNo }}</span>
+          </div>
+
+          <div class="stock-quantities-grid">
+            <div class="qty-card">
+              <span class="qty-lbl">Available Qty</span>
+              <span class="qty-num font-mono text-success">{{ selectedBin()?.availableQty }}</span>
+            </div>
+            <div class="qty-card">
+              <span class="qty-lbl">Allocated Qty</span>
+              <span class="qty-num font-mono text-warning">{{ selectedBin()?.allocatedQty }}</span>
+            </div>
+          </div>
+
+          <div class="action-buttons-row">
+            <button class="btn-primary-sm">Direct Putaway</button>
+            <button class="btn-secondary-sm">Wave Pick</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

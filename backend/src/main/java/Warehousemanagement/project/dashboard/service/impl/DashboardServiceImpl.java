@@ -6,6 +6,7 @@ import Warehousemanagement.project.dashboard.dto.response.EmployeeDashboardRespo
 import Warehousemanagement.project.dashboard.dto.response.ManagerDashboardResponse;
 import Warehousemanagement.project.dashboard.mapper.DashboardMapper;
 import Warehousemanagement.project.dashboard.service.DashboardService;
+import Warehousemanagement.project.security.model.Role;
 import Warehousemanagement.project.security.repository.PermissionRepository;
 import Warehousemanagement.project.security.repository.RoleRepository;
 import Warehousemanagement.project.security.repository.UserRepository;
@@ -39,13 +40,16 @@ public class DashboardServiceImpl implements DashboardService {
     @Transactional(readOnly = true)
     public AdminDashboardResponse getAdminDashboard() {
         long totalUsers = userRepository.count();
+        long activeUsers = userRepository.countByIsActive(true);
         long totalRoles = roleRepository.count();
         long totalPerms = permissionRepository.count();
 
         Map<String, Long> roleDist = new HashMap<>();
-        roleDist.put("ROLE_ADMIN", 1L);
-        roleDist.put("ROLE_MANAGER", 3L);
-        roleDist.put("ROLE_EMPLOYEE", 12L);
+        List<Role> roles = roleRepository.findAll();
+        for (Role r : roles) {
+            long count = roleRepository.countAssignedUsers(r.getId());
+            roleDist.put(r.getName(), count);
+        }
 
         Map<String, Object> facilityStatus = Map.of(
             "facilityCode", "WH-MAIN-01",
@@ -55,14 +59,14 @@ public class DashboardServiceImpl implements DashboardService {
         );
 
         Map<String, Object> systemHealth = Map.of(
-            "jvmUptimeSeconds", 86400,
+            "jvmUptimeSeconds", Runtime.getRuntime().totalMemory() / (1024 * 1024),
             "dbConnectionPool", "HEALTHY",
             "lockContentionRate", "0.01%"
         );
 
         return new AdminDashboardResponse(
             totalUsers,
-            totalUsers,
+            activeUsers,
             totalRoles,
             totalPerms,
             roleDist,

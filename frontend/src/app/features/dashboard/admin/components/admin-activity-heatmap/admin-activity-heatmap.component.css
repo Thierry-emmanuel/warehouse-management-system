@@ -1,0 +1,132 @@
+.heatmap-card {
+  padding: 1.25rem 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.25rem;
+}
+
+.heatmap-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.heatmap-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.heatmap-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.legend-text {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  margin: 0 0.25rem;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.matrix-wrapper {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.day-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-light);
+  padding: 0.125rem 0;
+  user-select: none;
+}
+
+.matrix-grid {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+
+.week-column {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 3px rgba(37, 99, 235, 0.4));
+  z-index: 10;
+}
+
+.lvl-0 { background-color: #F1F5F9; }
+.lvl-1 { background-color: #BFDBFE; }
+.lvl-2 { background-color: #60A5FA; }
+.lvl-3 { background-color: #2563EB; }
+.lvl-4 { background-color: #1D4ED8; }
+
+.tooltip-container {
+  margin-top: 0.75rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid var(--border-subtle);
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.active-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.tooltip-date {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.tooltip-sep {
+  color: var(--text-light);
+}
+
+.tooltip-count {
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.default-tooltip {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

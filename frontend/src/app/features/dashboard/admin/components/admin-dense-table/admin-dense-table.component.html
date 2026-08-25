@@ -1,0 +1,105 @@
+<div class="wms-card table-card">
+  <!-- Table Header Toolbar -->
+  <div class="table-header-toolbar">
+    <div class="header-left">
+      <h3 class="table-title">Recent Inventory Movements & Transactions</h3>
+      <span class="badge badge-primary">{{ transactions.length }} Batches</span>
+    </div>
+
+    <!-- Table Action Controls -->
+    <div class="header-controls">
+      <div class="select-dropdown">
+        <select class="ctrl-select">
+          <option>Sort By: Date (Newest)</option>
+          <option>Sort By: Total Value</option>
+          <option>Sort By: Quantity</option>
+        </select>
+      </div>
+
+      <div class="select-dropdown">
+        <select class="ctrl-select">
+          <option>All Statuses</option>
+          <option>Completed</option>
+          <option>In Transit</option>
+          <option>Processing</option>
+        </select>
+      </div>
+
+      <button class="btn-secondary-sm">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        <span>Export CSV</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Body -->
+  <div class="table-responsive">
+    <table class="wms-table">
+      <thead>
+        <tr>
+          <th class="th-checkbox">
+            <input type="checkbox" [checked]="selectAll()" (change)="toggleSelectAll()" />
+          </th>
+          <th>Date</th>
+          <th>Vendor / Customer</th>
+          <th>Product Name & SKU</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Total Value</th>
+          <th>Operator</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (tx of transactions; track tx.id) {
+          <tr [class.selected-row]="tx.selected">
+            <td class="td-checkbox">
+              <input type="checkbox" [checked]="tx.selected" (change)="toggleRow(tx)" />
+            </td>
+            <td>
+              <span class="font-mono text-date">{{ tx.date }}</span>
+            </td>
+            <td>
+              <div class="partner-cell">
+                <div class="avatar-pill {{ tx.avatarColor }}">{{ tx.partnerCode }}</div>
+                <span class="partner-name">{{ tx.partnerName }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="product-cell">
+                <span class="product-name">{{ tx.productName }}</span>
+                <span class="sku-tag font-mono">{{ tx.sku }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="font-mono price-text">${{ tx.unitPrice | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <span class="font-mono qty-badge">{{ tx.quantity }} units</span>
+            </td>
+            <td>
+              <span class="font-mono total-price">${{ tx.totalPrice | number:'1.2-2' }}</span>
+            </td>
+            <td>
+              <div class="operator-cell">
+                <div class="op-avatar">{{ tx.operatorInitials }}</div>
+                <span class="op-name">{{ tx.operatorName }}</span>
+              </div>
+            </td>
+            <td>
+              @if (tx.status === 'COMPLETED') {
+                <span class="badge badge-success">Completed</span>
+              } @else if (tx.status === 'IN_TRANSIT') {
+                <span class="badge badge-primary">In Transit</span>
+              } @else {
+                <span class="badge badge-warning">Processing</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

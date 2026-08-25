@@ -40,4 +40,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countByWarehouseId(Long warehouseId);
 
     long countByWarehouseIdAndIsActive(Long warehouseId, boolean isActive);
+
+    long countByIsActive(boolean isActive);
 }

@@ -1,0 +1,56 @@
+<div class="wms-card heatmap-card">
+  <div class="heatmap-header">
+    <div>
+      <h3 class="heatmap-title">Warehouse Movement Velocity & Putaway Activity</h3>
+      <p class="heatmap-subtitle">Daily SKU transactions, bin putaway batches and picker scans over the last 6 months</p>
+    </div>
+    
+    <!-- Legend -->
+    <div class="heatmap-legend">
+      <span class="legend-text">Less</span>
+      <span class="legend-swatch lvl-0"></span>
+      <span class="legend-swatch lvl-1"></span>
+      <span class="legend-swatch lvl-2"></span>
+      <span class="legend-swatch lvl-3"></span>
+      <span class="legend-swatch lvl-4"></span>
+      <span class="legend-text">More</span>
+    </div>
+  </div>
+
+  <!-- Heatmap Matrix -->
+  <div class="matrix-wrapper">
+    <div class="day-labels">
+      <span>Mon</span>
+      <span>Wed</span>
+      <span>Fri</span>
+      <span>Sun</span>
+    </div>
+
+    <div class="matrix-grid">
+      @for (week of weeks; track week[0].date) {
+        <div class="week-column">
+          @for (day of week; track day.date) {
+            <div
+              class="heatmap-cell lvl-{{ day.level }}"
+              (mouseenter)="onCellHover(day)"
+              (mouseleave)="onCellLeave()"
+            ></div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Tooltip Bar -->
+  <div class="tooltip-container">
+    @if (hoveredCell()) {
+      <div class="active-tooltip">
+        <span class="tooltip-date font-mono">{{ hoveredCell()?.date }}</span>
+        <span class="tooltip-sep">•</span>
+        <span class="tooltip-count">{{ hoveredCell()?.count }} stock movements</span>
+      </div>
+    } @else {
+      <div class="default-tooltip">Hover over any day cell to view precise operational throughput</div>
+    }
+  </div>
+</div>

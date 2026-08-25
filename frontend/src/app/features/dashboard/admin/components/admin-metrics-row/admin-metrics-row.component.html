@@ -3,18 +3,17 @@
   <div class="wms-card metric-card">
     <div class="metric-header">
       <span class="metric-label">TOTAL OPERATORS & USERS</span>
-      <span class="trend-badge positive">+12% vs last month</span>
+      <span class="trend-badge positive">Live DB</span>
     </div>
     <div class="metric-body">
-      <div class="metric-value">{{ data?.totalUsers ?? 16 }}</div>
-      <!-- SVG Sparkline -->
+      <div class="metric-value font-mono">{{ data?.totalUsers ?? 0 }} <span class="val-sub">Users</span></div>
       <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
         <path d="M0,25 Q15,10 30,18 T60,8 T85,15 T100,5" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" />
         <path d="M0,25 Q15,10 30,18 T60,8 T85,15 T100,5 L100,30 L0,30 Z" fill="rgba(37,99,235,0.08)" />
       </svg>
     </div>
     <div class="metric-footer">
-      <span class="footer-highlight">{{ data?.activeUsers ?? 16 }} Active</span>
+      <span class="footer-highlight">{{ data?.activeUsers ?? 0 }} Active</span>
       <span class="footer-subtext">across facility nodes</span>
     </div>
   </div>
@@ -22,57 +21,57 @@
   <!-- Card 2: Roles & Permissions -->
   <div class="wms-card metric-card">
     <div class="metric-header">
-      <span class="metric-label">DYNAMIC ROLES & PERMISSIONS</span>
-      <span class="tag-pill">RBAC Policy</span>
+      <span class="metric-label">DYNAMIC ROLES IN DOMAIN</span>
+      <span class="tag-pill monthly">RBAC Tier</span>
     </div>
     <div class="metric-body">
-      <div class="metric-value">{{ data?.totalRoles ?? 3 }} <span class="unit-text">Roles</span></div>
+      <div class="metric-value font-mono">{{ data?.totalRoles ?? 0 }} <span class="unit-text">Roles</span></div>
       <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
         <path d="M0,20 Q25,25 50,15 T75,10 T100,4" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
         <path d="M0,20 Q25,25 50,15 T75,10 T100,4 L100,30 L0,30 Z" fill="rgba(16,185,129,0.08)" />
       </svg>
     </div>
     <div class="metric-footer">
-      <span class="footer-highlight">{{ data?.totalPermissions ?? 17 }} Fine-Grained</span>
-      <span class="footer-subtext">action privileges</span>
+      <span class="footer-highlight">{{ data?.totalPermissions ?? 0 }} Fine-Grained</span>
+      <span class="footer-subtext">action permissions</span>
     </div>
   </div>
 
-  <!-- Card 3: Facility Gateways -->
+  <!-- Card 3: Connected Scanners -->
   <div class="wms-card metric-card">
     <div class="metric-header">
       <span class="metric-label">CONNECTED IOT SCANNERS</span>
-      <span class="status-live-dot">Live</span>
+      <span class="status-live-dot">Live Mesh</span>
     </div>
     <div class="metric-body">
-      <div class="metric-value">18 <span class="unit-text">Terminals</span></div>
+      <div class="metric-value font-mono">{{ data?.facilityStatus?.connectedScanners ?? 18 }} <span class="unit-text">Terminals</span></div>
       <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
         <path d="M0,15 Q20,5 40,12 T70,8 T100,10" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" />
         <path d="M0,15 Q20,5 40,12 T70,8 T100,10 L100,30 L0,30 Z" fill="rgba(249,115,22,0.08)" />
       </svg>
     </div>
     <div class="metric-footer">
-      <span class="footer-highlight">4 Gateways</span>
+      <span class="footer-highlight">{{ data?.facilityStatus?.activeGateways ?? 4 }} Gateways</span>
       <span class="footer-subtext">latency &lt; 45ms</span>
     </div>
   </div>
 
-  <!-- Card 4: System Performance -->
+  <!-- Card 4: Database & Engine Health -->
   <div class="wms-card metric-card">
     <div class="metric-header">
-      <span class="metric-label">DATABASE & LOCK CONTENTION</span>
-      <span class="tag-pill pool-ok">Pool Healthy</span>
+      <span class="metric-label">DATABASE & LOCK HEALTH</span>
+      <span class="tag-pill accuracy">{{ data?.systemHealth?.dbConnectionPool ?? 'HEALTHY' }}</span>
     </div>
     <div class="metric-body">
-      <div class="metric-value">0.01% <span class="unit-text">Contention</span></div>
+      <div class="metric-value font-mono">{{ data?.systemHealth?.lockContentionRate ?? '0.01%' }} <span class="unit-text">Contention</span></div>
       <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
-        <path d="M0,28 Q30,22 60,25 T90,26 T100,27" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" />
-        <path d="M0,28 Q30,22 60,25 T90,26 T100,27 L100,30 L0,30 Z" fill="rgba(59,130,246,0.08)" />
+        <path d="M0,28 Q30,22 60,25 T90,26 T100,27" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M0,28 Q30,22 60,25 T90,26 T100,27 L100,30 L0,30 Z" fill="rgba(139,92,246,0.08)" />
       </svg>
     </div>
     <div class="metric-footer">
-      <span class="footer-highlight">99.98% Uptime</span>
-      <span class="footer-subtext">PostgreSQL 16 engine</span>
+      <span class="footer-highlight">HikariCP 5.1</span>
+      <span class="footer-subtext">optimistic locking active</span>
     </div>
   </div>
 </div>

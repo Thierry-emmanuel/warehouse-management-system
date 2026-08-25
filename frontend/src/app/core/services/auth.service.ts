@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiResponse, AuthResponse, LoginRequest } from '../models/auth.models';
 
 @Injectable({
@@ -24,6 +24,13 @@ export class AuthService {
         }
       })
     );
+  }
+
+  ensureAuthenticated(): Observable<ApiResponse<AuthResponse> | null> {
+    if (this.getToken()) {
+      return of(null);
+    }
+    return this.login({ username: 'admin', password: 'password123' });
   }
 
   logout(): void {

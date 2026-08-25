@@ -1,0 +1,53 @@
+<div class="wms-card chart-card">
+  <div class="chart-header">
+    <div>
+      <h3 class="chart-title">Supply Chain Flow & Inventory Velocity</h3>
+      <p class="chart-subtitle">Monthly inbound receiving vs outbound dispatch volume (Units & Value)</p>
+    </div>
+
+    <div class="legend-group">
+      <div class="legend-item">
+        <span class="dot-inflow"></span>
+        <span class="legend-label">Inbound Receiving</span>
+      </div>
+      <div class="legend-item">
+        <span class="dot-outflow"></span>
+        <span class="legend-label">Outbound Dispatch</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bar Chart Stage -->
+  <div class="bars-container">
+    @for (m of months; track m.month) {
+      <div
+        class="month-bar-slot"
+        [class.active]="selectedMonth()?.month === m.month"
+        (mouseenter)="onHoverMonth(m)"
+      >
+        <!-- Floating Tooltip on Active Bar -->
+        @if (selectedMonth()?.month === m.month) {
+          <div class="floating-tooltip">
+            <span class="tt-title">{{ m.month }} 2026</span>
+            <div class="tt-row">
+              <span class="tt-lbl">In:</span>
+              <span class="tt-val font-mono">${{ m.inflow | number }}</span>
+            </div>
+            <div class="tt-row">
+              <span class="tt-lbl">Out:</span>
+              <span class="tt-val font-mono">${{ m.outflow | number }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Dual Bars -->
+        <div class="bar-pair">
+          <div class="bar bar-inflow" [style.height.%]="m.inflowHeight"></div>
+          <div class="bar bar-outflow" [style.height.%]="m.outflowHeight"></div>
+        </div>
+
+        <span class="month-name">{{ m.month }}</span>
+      </div>
+    }
+  </div>
+</div>

@@ -1,43 +1,83 @@
 <div class="dashboard-page">
-  <!-- Page Hero Title -->
-  <div class="page-hero">
-    <div class="hero-text">
-      <h1 class="hero-title">Platform Administration & RBAC Hub</h1>
-      <p class="hero-subtitle">Facility isolation, operator directory, and fine-grained security policies</p>
+  <!-- Error Alert Banner -->
+  @if (errorMessage()) {
+    <div class="error-banner">
+      <div class="error-content">
+        <svg class="error-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div class="error-text">
+          <span class="error-title">Backend Connection Alert</span>
+          <span class="error-msg">{{ errorMessage() }}</span>
+        </div>
+      </div>
+      <button class="btn-retry" (click)="initLiveDashboard()">Retry Live Connection</button>
+    </div>
+  }
+
+  <!-- Top Action & Context Header -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">{{ dashboardData()?.facilityStatus?.facilityCode || 'FACILITY WH-MAIN-01' }}</span>
+      </div>
+      <h1 class="page-title">Enterprise Supply Chain & Logistics Hub</h1>
+      <p class="page-subtitle">Central live telemetry from PostgreSQL • Role allocations & security policies</p>
     </div>
 
-    <div class="hero-actions">
-      <button class="btn-secondary" (click)="loadDashboardData()">
-        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="top-actions">
+      <!-- Global Search Bar -->
+      <div class="global-search-box">
+        <svg class="search-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" class="search-input-field" placeholder="Search SKU, PO, Wave..." />
+        <span class="kbd-badge font-mono">Ctrl + K</span>
+      </div>
+
+      <button class="btn-secondary" (click)="initLiveDashboard()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
         </svg>
         <span>Sync Telemetry</span>
       </button>
+
       <button class="btn-primary">
-        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        <span>Audit Logs</span>
+        <span>+ Add New Item</span>
       </button>
     </div>
   </div>
 
-  <!-- Row 1: KPI Top Metric Cards with Sparklines -->
+  <!-- SECTION 1: Top 4 KPI Summary Cards with Live Metrics (LogistiQ Standard) -->
   <app-admin-metrics-row [data]="dashboardData()"></app-admin-metrics-row>
 
-  <!-- Row 2: Role Allocation & Permission Matrix -->
-  <app-admin-role-distribution [distribution]="dashboardData()?.userRoleDistribution ?? null"></app-admin-role-distribution>
+  <!-- SECTION 2: 2-Column Analytics (Movement Heatmap & Throughput Chart) -->
+  <div class="analytics-row-grid">
+    <div class="col-heatmap">
+      <app-admin-activity-heatmap></app-admin-activity-heatmap>
+    </div>
+    <div class="col-chart">
+      <app-admin-trend-chart></app-admin-trend-chart>
+    </div>
+  </div>
 
-  <!-- Row 3: Dense User & Operator Table -->
-  <app-admin-user-table
-    [users]="users()"
-    [totalUsers]="totalUsers()"
-    [isLoading]="isLoading()"
-    (search)="onSearchUsers($event)"
-    (toggleStatus)="onToggleUserStatus($event)"
-  ></app-admin-user-table>
+  <!-- SECTION 3: High-Bay Warehouse Rack & Bin Visualizer (Deposco Standard) -->
+  <app-admin-rack-visualizer></app-admin-rack-visualizer>
 
-  <!-- Row 4: IoT Gateways & Engine Health -->
+  <!-- SECTION 4: Staff Role Distribution & Dynamic RBAC (Live from DB) -->
+  <app-admin-role-distribution
+    [distribution]="dashboardData()?.userRoleDistribution ?? null"
+    [totalUsers]="dashboardData()?.totalUsers ?? 0"
+  ></app-admin-role-distribution>
+
+  <!-- SECTION 5: Industrial Multi-Select Data Table (Live Registered Users & Operators) -->
+  <app-admin-dense-table></app-admin-dense-table>
+
+  <!-- SECTION 6: IoT Gateway Mesh & Database Health -->
   <app-admin-system-health
     [facilityStatus]="dashboardData()?.facilityStatus ?? null"
     [systemHealth]="dashboardData()?.systemHealth ?? null"

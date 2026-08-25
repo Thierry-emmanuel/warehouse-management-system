@@ -1,0 +1,237 @@
+<div class="spatial-twin-container">
+  <!-- Visualizer Header Toolbar -->
+  <div class="twin-header">
+    <div class="twin-title-group">
+      <div class="twin-badge">
+        <span class="live-dot"></span>
+        <span>ISOMETRIC 3D DIGITAL TWIN</span>
+      </div>
+      <h2 class="twin-heading">Warehouse Operational Floorplan & Spatial Nodes</h2>
+      <p class="twin-subheading">Interactive visual digital twin of Central Distribution Hub WH-MAIN-01</p>
+    </div>
+
+    <!-- Quick Category Filter Pills -->
+    <div class="twin-filters">
+      <button class="filter-btn" [class.active]="activeFilter() === 'ALL'" (click)="setFilter('ALL')">Full Facility View</button>
+      <button class="filter-btn" [class.active]="activeFilter() === 'STORAGE'" (click)="setFilter('STORAGE')">Storage Racks</button>
+      <button class="filter-btn" [class.active]="activeFilter() === 'TRUCK_DOCK'" (click)="setFilter('TRUCK_DOCK')">Truck Docks</button>
+      <button class="filter-btn" [class.active]="activeFilter() === 'PARCELS'" (click)="setFilter('PARCELS')">Parcels & Staging</button>
+    </div>
+  </div>
+
+  <!-- Isometric 3D Cutaway Warehouse Canvas -->
+  <div class="isometric-stage">
+    <svg class="stage-svg" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <!-- Gradients for realistic 3D lighting -->
+        <linearGradient id="wallGradientLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1E3A5F" />
+          <stop offset="100%" stop-color="#0F2847" />
+        </linearGradient>
+        <linearGradient id="wallGradientBack" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#254B77" />
+          <stop offset="100%" stop-color="#163456" />
+        </linearGradient>
+        <linearGradient id="floorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#3B7097" />
+          <stop offset="100%" stop-color="#244F75" />
+        </linearGradient>
+        <linearGradient id="cartonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#F6C58D" />
+          <stop offset="100%" stop-color="#D99B5B" />
+        </linearGradient>
+        <linearGradient id="cartonDark" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#D99B5B" />
+          <stop offset="100%" stop-color="#B87838" />
+        </linearGradient>
+        <linearGradient id="palletWood" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#C48E59" />
+          <stop offset="100%" stop-color="#9C6B37" />
+        </linearGradient>
+        <linearGradient id="truckBody" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#FFFFFF" />
+          <stop offset="100%" stop-color="#E2E8F0" />
+        </linearGradient>
+      </defs>
+
+      <!-- 1. ISOMETRIC ROOM WALLS & CUTAWAY FLOOR -->
+      <!-- Floor Base -->
+      <polygon points="500,200 950,380 500,560 50,380" fill="url(#floorGradient)" stroke="#1E293B" stroke-width="2" />
+      
+      <!-- Back Wall (Right) -->
+      <polygon points="500,40 950,220 950,380 500,200" fill="url(#wallGradientBack)" stroke="#0F172A" stroke-width="1.5" />
+      <!-- Back Wall (Left) -->
+      <polygon points="50,220 500,40 500,200 50,380" fill="url(#wallGradientLeft)" stroke="#0F172A" stroke-width="1.5" />
+
+      <!-- Facility Safety Boundary Stripes on Floor -->
+      <line x1="500" y1="550" x2="940" y2="375" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="14,10" />
+      <line x1="500" y1="550" x2="60" y2="375" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="14,10" />
+      <text x="750" y="500" fill="#E2E8F0" font-size="14" font-weight="800" letter-spacing="3" opacity="0.6">WAREHOUSE</text>
+      <text x="320" y="110" fill="#E2E8F0" font-size="16" font-weight="900" letter-spacing="4" opacity="0.7">STORAGE</text>
+      <text x="800" y="110" fill="#E2E8F0" font-size="16" font-weight="900" letter-spacing="4" opacity="0.7">TRUCK DOCKS</text>
+
+      <!-- 2. INBOUND TRUCK DOCK OPENING & SEMI-TRUCK (Top Right Wall) -->
+      <g class="interactive-object" (click)="onSelect('TRUCK-DOCK')" [class.active-node]="selectedZoneId() === 'TRUCK-DOCK'">
+        <!-- Dock Portal Opening -->
+        <polygon points="620,180 840,268 840,410 620,320" fill="#0F172A" stroke="#F59E0B" stroke-width="3" />
+        <rect x="625" y="185" width="210" height="12" fill="#F59E0B" opacity="0.8" />
+        
+        <!-- Semi-Truck Cargo Trailer Reversing In -->
+        <!-- Roof of Trailer -->
+        <polygon points="740,150 990,250 990,280 740,180" fill="url(#truckBody)" stroke="#94A3B8" stroke-width="1.5" />
+        <!-- Side of Trailer -->
+        <polygon points="740,180 990,280 990,390 740,290" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.5" />
+        <!-- Rear Opening of Trailer into Facility -->
+        <polygon points="680,260 740,180 740,290 680,370" fill="#1E293B" stroke="#64748B" stroke-width="2" />
+        <!-- Cargo Pallets Inside Truck -->
+        <polygon points="695,290 725,270 725,320 695,340" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="725,270 735,275 735,325 725,320" fill="url(#cartonDark)" />
+
+        <!-- Dock Bay HUD Marker -->
+        <g transform="translate(730, 160)">
+          <rect x="-60" y="-14" width="120" height="26" rx="13" fill="#1E293B" stroke="#10B981" stroke-width="2" />
+          <circle cx="-42" cy="-1" r="4" fill="#10B981" />
+          <text x="-32" y="3" fill="#FFFFFF" font-size="11" font-weight="700">Dock Bay #1 (PO)</text>
+        </g>
+      </g>
+
+      <!-- 3. MULTI-TIER PALLET STORAGE RACKS (Storage Zone - Left & Center) -->
+      <g class="interactive-object" (click)="onSelect('STORAGE-RACK')" [class.active-node]="selectedZoneId() === 'STORAGE-RACK'">
+        <!-- RACK 1: High Multi-Tier Pallet Rack (Left-Center) -->
+        <!-- Upright Steel Beams (Light Blue Industrial Frame) -->
+        <line x1="200" y1="260" x2="200" y2="440" stroke="#38BDF8" stroke-width="4" />
+        <line x1="320" y1="210" x2="320" y2="390" stroke="#38BDF8" stroke-width="4" />
+        <line x1="420" y1="250" x2="420" y2="430" stroke="#38BDF8" stroke-width="4" />
+        <line x1="300" y1="300" x2="300" y2="480" stroke="#38BDF8" stroke-width="4" />
+
+        <!-- Shelf Level 1 (Top Tier) -->
+        <polygon points="200,280 320,230 420,270 300,320" fill="#E0F2FE" stroke="#0284C7" stroke-width="2" />
+        <!-- Pallet & Cartons on Top Tier -->
+        <polygon points="230,265 270,248 310,264 270,281" fill="url(#palletWood)" />
+        <polygon points="240,250 270,237 270,265 240,278" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="270,237 300,250 300,278 270,265" fill="url(#cartonDark)" stroke="#B87838" />
+        <polygon points="240,250 270,237 300,250 270,263" fill="#FDE68A" />
+
+        <!-- Shelf Level 2 (Middle Tier) -->
+        <polygon points="200,340 320,290 420,330 300,380" fill="#E0F2FE" stroke="#0284C7" stroke-width="2" />
+        <!-- Pallet 1 on Middle Tier -->
+        <polygon points="220,325 260,308 300,324 260,341" fill="url(#palletWood)" />
+        <polygon points="230,310 260,297 260,325 230,338" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="260,297 290,310 290,338 260,325" fill="url(#cartonDark)" stroke="#B87838" />
+        <polygon points="230,310 260,297 290,310 260,323" fill="#FDE68A" />
+        <!-- Pallet 2 on Middle Tier -->
+        <polygon points="320,325 360,308 400,324 360,341" fill="url(#palletWood)" />
+        <polygon points="330,310 360,297 360,325 330,338" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="360,297 390,310 390,338 360,325" fill="url(#cartonDark)" stroke="#B87838" />
+
+        <!-- Shelf Level 3 (Bottom Tier) -->
+        <polygon points="200,400 320,350 420,390 300,440" fill="#E0F2FE" stroke="#0284C7" stroke-width="2" />
+        <polygon points="230,370 270,353 310,369 270,386" fill="url(#palletWood)" />
+        <polygon points="240,355 270,342 270,370 240,383" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="270,342 300,355 300,383 270,370" fill="url(#cartonDark)" stroke="#B87838" />
+
+        <!-- RACK 2: Back High-Bay Rack (Left Wall) -->
+        <line x1="70" y1="280" x2="70" y2="420" stroke="#38BDF8" stroke-width="3" />
+        <line x1="170" y1="235" x2="170" y2="375" stroke="#38BDF8" stroke-width="3" />
+        <polygon points="70,330 170,285 240,315 140,360" fill="#E0F2FE" stroke="#0284C7" stroke-width="1.5" />
+        <polygon points="100,305 140,287 180,304 140,321" fill="url(#palletWood)" />
+        <polygon points="110,290 140,277 140,305 110,318" fill="url(#cartonGradient)" stroke="#B87838" />
+
+        <!-- Storage Racks HUD Marker -->
+        <g transform="translate(310, 200)">
+          <rect x="-65" y="-14" width="130" height="26" rx="13" fill="#1E293B" stroke="#38BDF8" stroke-width="2" />
+          <circle cx="-46" cy="-1" r="4" fill="#38BDF8" />
+          <text x="-36" y="3" fill="#FFFFFF" font-size="11" font-weight="700">Racks A-01 (88%)</text>
+        </g>
+      </g>
+
+      <!-- 4. FORKLIFT & PALLET TRANSPORT (Center Aisle) -->
+      <g class="interactive-object" (click)="onSelect('FORKLIFT-01')" [class.active-node]="selectedZoneId() === 'FORKLIFT-01'">
+        <!-- Yellow Forklift Vehicle -->
+        <!-- Chassis Body -->
+        <polygon points="410,370 480,335 510,350 440,385" fill="#EAB308" stroke="#A16207" stroke-width="2" />
+        <polygon points="440,385 510,350 510,385 440,420" fill="#CA8A04" stroke="#A16207" stroke-width="2" />
+        <!-- Wheels -->
+        <circle cx="435" cy="415" r="10" fill="#1E293B" />
+        <circle cx="500" cy="385" r="10" fill="#1E293B" />
+        <!-- Protective Overhead Guard Cage -->
+        <line x1="460" y1="345" x2="460" y2="300" stroke="#0F172A" stroke-width="3" />
+        <line x1="495" y1="330" x2="495" y2="285" stroke="#0F172A" stroke-width="3" />
+        <polygon points="450,300 485,285 505,295 470,310" fill="#334155" />
+        <!-- Forklift Driver -->
+        <circle cx="475" cy="320" r="7" fill="#FDE047" stroke="#CA8A04" />
+        <rect x="470" y="328" width="10" height="12" rx="2" fill="#2563EB" />
+        <!-- Mast & Forks Lifting Pallet -->
+        <line x1="390" y1="340" x2="390" y2="400" stroke="#1E293B" stroke-width="4" />
+        <!-- Carried Pallet & Staged Cartons -->
+        <polygon points="340,375 385,355 425,372 380,392" fill="url(#palletWood)" />
+        <polygon points="350,355 385,340 385,370 350,385" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="385,340 420,355 420,385 385,370" fill="url(#cartonDark)" stroke="#B87838" />
+
+        <!-- Forklift HUD Marker -->
+        <g transform="translate(450, 260)">
+          <rect x="-55" y="-12" width="110" height="24" rx="12" fill="#1E293B" stroke="#EAB308" stroke-width="2" />
+          <circle cx="-38" cy="-1" r="4" fill="#EAB308" />
+          <text x="-28" y="3" fill="#FFFFFF" font-size="10" font-weight="700">Forklift FL-01</text>
+        </g>
+      </g>
+
+      <!-- 5. PARCEL SORTING & ONLINE ORDERS STAGING (Bottom Center & Right) -->
+      <g class="interactive-object" (click)="onSelect('PARCEL-STAGING')" [class.active-node]="selectedZoneId() === 'PARCEL-STAGING'">
+        <!-- Staged Floor Wooden Pallets with Boxes -->
+        <polygon points="560,420 640,380 720,420 640,460" fill="url(#palletWood)" stroke="#9C6B37" stroke-width="1.5" />
+        <!-- Stacked Parcel Boxes -->
+        <polygon points="580,395 620,375 620,415 580,435" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="620,375 660,395 660,435 620,415" fill="url(#cartonDark)" stroke="#B87838" />
+        <polygon points="580,395 620,375 660,395 620,415" fill="#FDE68A" />
+        <!-- Top Carton Layer -->
+        <polygon points="600,360 635,342 635,378 600,396" fill="url(#cartonGradient)" stroke="#B87838" />
+        <polygon points="635,342 670,360 670,396 635,378" fill="url(#cartonDark)" stroke="#B87838" />
+        <polygon points="600,360 635,342 670,360 635,378" fill="#FDE68A" />
+
+        <!-- Parcels HUD Marker -->
+        <g transform="translate(640, 320)">
+          <rect x="-60" y="-12" width="120" height="24" rx="12" fill="#1E293B" stroke="#F97316" stroke-width="2" />
+          <circle cx="-42" cy="-1" r="4" fill="#F97316" />
+          <text x="-32" y="3" fill="#FFFFFF" font-size="10" font-weight="700">Parcels (340 units)</text>
+        </g>
+      </g>
+
+      <!-- 6. INDUSTRIAL WORKERS & OPERATORS IN UNIFORM (Hardhats & Safety Vests) -->
+      <g class="interactive-object" (click)="onSelect('WORKER-TEAM')" [class.active-node]="selectedZoneId() === 'WORKER-TEAM'">
+        <!-- Worker 1 (Left near Rack with box) -->
+        <g transform="translate(240, 440)">
+          <!-- Hardhat -->
+          <circle cx="0" cy="-35" r="7" fill="#F59E0B" stroke="#D97706" />
+          <!-- Face -->
+          <circle cx="0" cy="-30" r="5" fill="#FBCFE8" />
+          <!-- Blue Overall Body & Orange Safety Vest -->
+          <rect x="-6" y="-25" width="12" height="18" rx="3" fill="#2563EB" />
+          <rect x="-5" y="-24" width="10" height="9" fill="#F97316" />
+          <!-- Legs -->
+          <line x1="-3" y1="-7" x2="-5" y2="10" stroke="#1E3A8A" stroke-width="3" />
+          <line x1="3" y1="-7" x2="5" y2="10" stroke="#1E3A8A" stroke-width="3" />
+          <!-- Holding Carton -->
+          <polygon points="-8,-18 2,-23 12,-18 2,-13" fill="#FDE68A" />
+          <polygon points="-8,-18 2,-13 2,-3 -8,-8" fill="url(#cartonGradient)" />
+          <polygon points="2,-13 12,-18 12,-8 2,-3" fill="url(#cartonDark)" />
+          <!-- Text Label -->
+          <text x="0" y="22" fill="#FFFFFF" font-size="9" font-weight="700" text-anchor="middle">Operator #12</text>
+        </g>
+
+        <!-- Worker 2 (Center near parcels with digital tablet/scanner) -->
+        <g transform="translate(540, 430)">
+          <circle cx="0" cy="-35" r="7" fill="#F59E0B" stroke="#D97706" />
+          <circle cx="0" cy="-30" r="5" fill="#FBCFE8" />
+          <rect x="-6" y="-25" width="12" height="18" rx="3" fill="#2563EB" />
+          <rect x="-5" y="-24" width="10" height="9" fill="#F97316" />
+          <line x1="-3" y1="-7" x2="-4" y2="10" stroke="#1E3A8A" stroke-width="3" />
+          <line x1="3" y1="-7" x2="4" y2="10" stroke="#1E3A8A" stroke-width="3" />
+          <!-- Handheld Scanner / Clipboard -->
+          <rect x="5" y="-20" width="8" height="10" rx="1" fill="#FFFFFF" stroke="#0F172A" />
+          <text x="0" y="22" fill="#FFFFFF" font-size="9" font-weight="700" text-anchor="middle">Wave Specialist</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+</div>

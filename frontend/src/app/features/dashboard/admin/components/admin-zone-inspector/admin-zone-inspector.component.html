@@ -1,0 +1,88 @@
+<div class="wms-card inspector-card">
+  @if (selectedZone) {
+    <!-- Inspector Header -->
+    <div class="inspector-header">
+      <div>
+        <div class="zone-tag-row">
+          <span class="zone-code">{{ selectedZone.code }}</span>
+          @if (selectedZone.status === 'OPTIMAL') {
+            <span class="badge badge-success">Optimal Flow</span>
+          } @else if (selectedZone.status === 'NEAR_CAPACITY') {
+            <span class="badge badge-warning">Near Capacity</span>
+          } @else if (selectedZone.status === 'CRITICAL') {
+            <span class="badge badge-danger">Critical (&gt;90%)</span>
+          } @else {
+            <span class="badge badge-primary">Ready / Idle</span>
+          }
+        </div>
+        <h4 class="inspector-title">{{ selectedZone.name }}</h4>
+      </div>
+    </div>
+
+    <!-- Key Metrics Grid -->
+    <div class="metrics-mini-grid">
+      <!-- Metric 1: Fill Rate -->
+      <div class="mini-stat-card">
+        <span class="stat-lbl">Occupancy Fill Rate</span>
+        <div class="stat-progress-val">
+          <span class="stat-num">{{ selectedZone.occupancyPercent }}%</span>
+          <span class="stat-unit">{{ selectedZone.capacityUnits }}</span>
+        </div>
+        <div class="fill-track">
+          <div
+            class="fill-bar"
+            [class.fill-green]="selectedZone.occupancyPercent < 70"
+            [class.fill-amber]="selectedZone.occupancyPercent >= 70 && selectedZone.occupancyPercent < 90"
+            [class.fill-red]="selectedZone.occupancyPercent >= 90"
+            [style.width.%]="selectedZone.occupancyPercent"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Metric 2: Assigned Staff / Operator -->
+      <div class="mini-stat-card">
+        <span class="stat-lbl">Assigned Floor Specialist</span>
+        <span class="stat-operator font-mono">{{ selectedZone.assignedOperator }}</span>
+        <span class="stat-sub">Connected via Scanner Terminal #4</span>
+      </div>
+
+      @if (selectedZone.temperature) {
+        <!-- Metric 3: Ambient / Cold Temp -->
+        <div class="mini-stat-card">
+          <span class="stat-lbl">Storage Climate Sensor</span>
+          <span class="stat-temp">{{ selectedZone.temperature }}</span>
+          <span class="stat-sub">HVAC Zone 02 Active</span>
+        </div>
+      }
+    </div>
+
+    <!-- Active SKUs in Zone -->
+    <div class="sku-section">
+      <span class="sku-header-lbl">STAGED SKUS & PALLET LOTS</span>
+      <div class="sku-tags-list">
+        @for (sku of selectedZone.activeSkus; track sku) {
+          <div class="sku-pill">
+            <span class="sku-dot"></span>
+            <span class="sku-name">{{ sku }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Quick Zone Actions -->
+    <div class="inspector-actions">
+      <button class="btn-primary-sm">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Direct Putaway</span>
+      </button>
+      <button class="btn-secondary-sm">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        <span>Generate Wave Pick</span>
+      </button>
+    </div>
+  }
+</div>

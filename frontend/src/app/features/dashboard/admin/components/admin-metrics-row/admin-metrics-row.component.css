@@ -1,14 +1,18 @@
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .metric-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
 }
 
 .metric-header {
@@ -22,13 +26,13 @@
   font-size: 0.6875rem;
   font-weight: 700;
   color: var(--text-muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .trend-badge {
   font-size: 0.6875rem;
-  font-weight: 600;
-  padding: 0.125rem 0.375rem;
+  font-weight: 700;
+  padding: 0.125rem 0.4rem;
   border-radius: var(--radius-sm);
 }
 
@@ -47,15 +51,21 @@
   border-radius: var(--radius-full);
 }
 
-.tag-pill.pool-ok {
+.tag-pill.monthly {
   background-color: var(--primary-blue-light);
   color: var(--primary-blue);
   border-color: var(--primary-blue-border);
 }
 
+.tag-pill.accuracy {
+  background-color: #F3E8FF;
+  color: #7C3AED;
+  border-color: #DDD6FE;
+}
+
 .status-live-dot {
   font-size: 0.6875rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--status-success-text);
   background-color: var(--status-success-light);
   padding: 0.125rem 0.5rem;
@@ -70,21 +80,27 @@
 }
 
 .metric-value {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.625rem;
+  font-weight: 800;
   color: var(--text-main);
   line-height: 1;
 }
 
-.unit-text {
+.val-sub {
   font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.unit-text {
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--text-muted);
 }
 
 .sparkline {
-  width: 90px;
-  height: 28px;
+  width: 85px;
+  height: 26px;
 }
 
 .metric-footer {
@@ -103,4 +119,8 @@
 
 .footer-subtext {
   color: var(--text-muted);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }

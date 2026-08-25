@@ -1,0 +1,162 @@
+.chart-card {
+  padding: 1.25rem 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.25rem;
+}
+
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.chart-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.chart-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.legend-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.dot-inflow {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background-color: var(--primary-blue);
+}
+
+.dot-outflow {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background-color: #93C5FD;
+}
+
+.bars-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 180px;
+  padding: 0 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.month-bar-slot {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  position: relative;
+  padding: 0 4px;
+}
+
+.bar-pair {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 140px;
+  width: 100%;
+  justify-content: center;
+}
+
+.bar {
+  width: 12px;
+  border-radius: 3px 3px 0 0;
+  transition: all 0.2s ease;
+}
+
+.bar-inflow {
+  background-color: var(--primary-blue);
+}
+
+.bar-outflow {
+  background-color: #93C5FD;
+}
+
+.month-bar-slot:hover .bar-inflow {
+  background-color: var(--primary-blue-hover);
+  transform: scaleY(1.05);
+}
+
+.month-bar-slot:hover .bar-outflow {
+  background-color: #60A5FA;
+  transform: scaleY(1.05);
+}
+
+.month-name {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.month-bar-slot.active .month-name {
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.floating-tooltip {
+  position: absolute;
+  top: -20px;
+  background-color: #0F172A;
+  color: #FFFFFF;
+  padding: 0.4rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.tt-title {
+  font-weight: 700;
+  color: #93C5FD;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tt-lbl {
+  color: #94A3B8;
+}
+
+.tt-val {
+  font-weight: 600;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
