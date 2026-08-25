@@ -1,0 +1,93 @@
+<div class="categories-page">
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span>MASTER TAXONOMY</span>
+      </div>
+      <h1 class="page-title">SKU Category Hierarchy & Classification</h1>
+      <p class="page-subtitle">Multi-tier SKU classification tree, parent-child inheritance, and active product metrics</p>
+    </div>
+
+    <div class="top-actions">
+      <div class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Filter categories by name or code..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearch()"
+        />
+      </div>
+      <button class="btn-primary" (click)="openModal()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>New Category</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="wms-card table-card">
+    <div class="table-responsive">
+      <table class="wms-table">
+        <thead>
+          <tr>
+            <th>Category Name</th>
+            <th>Category Code</th>
+            <th>Parent Tier</th>
+            <th>Active SKUs</th>
+            <th>Description</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of categories(); track c.id) {
+            <tr>
+              <td>
+                <div class="cat-name-cell">
+                  <div class="cat-folder-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                    </svg>
+                  </div>
+                  <span class="cat-name">{{ c.name }}</span>
+                </div>
+              </td>
+              <td><span class="code-pill font-mono">{{ c.code }}</span></td>
+              <td>
+                @if (c.parentName) {
+                  <span class="badge badge-slate">{{ c.parentName }}</span>
+                } @else {
+                  <span class="badge badge-primary">Root Category</span>
+                }
+              </td>
+              <td><span class="sku-count font-mono">{{ c.activeProductsCount || 0 }} SKUs</span></td>
+              <td><span class="desc-text">{{ c.description || 'No description provided.' }}</span></td>
+              <td class="text-right">
+                <button class="btn-delete" (click)="deleteCategory(c.id)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-state">
+                @if (isLoading()) {
+                  <span>Loading category taxonomy...</span>
+                } @else {
+                  <span>No categories registered in database.</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-category-modal
+    [isOpen]="isModalOpen()"
+    [categories]="categories()"
+    (close)="closeModal()"
+    (save)="onSaveCategory($event)"
+  ></app-category-modal>
+</div>

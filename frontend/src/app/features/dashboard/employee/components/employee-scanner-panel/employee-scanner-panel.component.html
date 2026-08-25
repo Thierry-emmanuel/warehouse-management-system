@@ -1,0 +1,94 @@
+<div class="wms-card scanner-card">
+  <!-- Step Progress Header -->
+  <div class="scanner-header">
+    <div class="header-left">
+      <div class="terminal-badge">
+        <span class="pulse-dot"></span>
+        <span class="terminal-id">TERMINAL #4 (ONLINE)</span>
+      </div>
+      <h3 class="scanner-title">Directed Pick & Putaway Scanner</h3>
+    </div>
+    <button class="btn-reset" (click)="resetWorkflow()">Reset Step</button>
+  </div>
+
+  <!-- 3-Step Breadcrumb Progress -->
+  <div class="stepper-bar">
+    <div class="step-pill" [class.active]="currentStep() === 1" [class.completed]="currentStep() > 1">
+      <span class="step-num">1</span>
+      <span class="step-lbl">Scan Bin Location</span>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step-pill" [class.active]="currentStep() === 2" [class.completed]="currentStep() > 2">
+      <span class="step-num">2</span>
+      <span class="step-lbl">Scan Item SKU</span>
+    </div>
+    <div class="step-divider"></div>
+    <div class="step-pill" [class.active]="currentStep() === 3">
+      <span class="step-num">3</span>
+      <span class="step-lbl">Confirm Quantity</span>
+    </div>
+  </div>
+
+  <!-- Active Mission Target Box -->
+  <div class="target-mission-box">
+    <div class="mission-row">
+      <div class="target-field">
+        <span class="field-lbl">Target Bin Location</span>
+        <span class="field-val font-mono">{{ targetBin }}</span>
+      </div>
+      <div class="target-field">
+        <span class="field-lbl">Expected SKU</span>
+        <span class="field-val font-mono">{{ targetSku }}</span>
+      </div>
+      <div class="target-field">
+        <span class="field-lbl">Required Qty</span>
+        <span class="field-val font-mono">{{ targetQty }} Units</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barcode Scanner Input Field (Autofocus Target) -->
+  @if (currentStep() < 3) {
+    <form (ngSubmit)="onSubmitBarcode()" class="scan-form">
+      <div class="scan-input-wrapper">
+        <svg class="scan-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+        </svg>
+        <input
+          type="text"
+          class="scan-input font-mono"
+          placeholder="Awaiting Laser Barcode Scan (e.g. {{ currentStep() === 1 ? targetBin : targetSku }})..."
+          [(ngModel)]="barcodeInput"
+          name="barcodeInput"
+          autofocus
+        />
+        <button type="submit" class="btn-scan-submit">Verify Scan</button>
+      </div>
+    </form>
+  } @else {
+    <!-- Step 3: Fast Quantity Confirmation Stepper -->
+    <div class="qty-confirm-box">
+      <div class="qty-stepper">
+        <button class="step-btn" (click)="confirmedQty = confirmedQty > 1 ? confirmedQty - 1 : 1">-</button>
+        <input type="number" class="qty-input font-mono" [(ngModel)]="confirmedQty" />
+        <button class="step-btn" (click)="confirmedQty = confirmedQty + 1">+</button>
+      </div>
+      <button class="btn-confirm-pick" (click)="confirmPick()">Confirm & Stow in Tote</button>
+    </div>
+  }
+
+  <!-- Feedback Status Box -->
+  <div class="scan-status-alert" [class.alert-success]="lastScanStatus() === 'SUCCESS'" [class.alert-danger]="lastScanStatus() === 'ERROR'">
+    <span class="status-msg">{{ lastScanMessage() }}</span>
+  </div>
+
+  <!-- Hardware Hotkeys Footer -->
+  <div class="shortcuts-footer">
+    @for (sc of shortcuts; track sc.key) {
+      <div class="shortcut-pill">
+        <span class="sc-key font-mono">{{ sc.key }}</span>
+        <span class="sc-label">{{ sc.label }}</span>
+      </div>
+    }
+  </div>
+</div>

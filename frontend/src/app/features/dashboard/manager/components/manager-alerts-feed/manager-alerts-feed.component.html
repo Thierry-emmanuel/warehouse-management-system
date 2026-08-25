@@ -1,0 +1,22 @@
+<div class="wms-card alerts-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Operational Flags & Inventory Alerts</h3>
+      <p class="card-subtitle">Automated reorder thresholds, temperature variance and dock delays</p>
+    </div>
+    <span class="badge badge-warning">{{ alerts.length }} Active</span>
+  </div>
+
+  <div class="alerts-list">
+    @for (alert of alerts; track alert) {
+      <div class="alert-item">
+        <div class="alert-indicator"></div>
+        <span class="alert-text">{{ alert }}</span>
+      </div>
+    } @empty {
+      <div class="empty-alerts">
+        <span>Zero active flags. All facility operations flowing normally.</span>
+      </div>
+    }
+  </div>
+</div>

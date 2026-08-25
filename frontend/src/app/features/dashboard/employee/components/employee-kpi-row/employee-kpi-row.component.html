@@ -1,0 +1,77 @@
+<div class="metrics-grid">
+  <!-- Card 1: Pending Picks -->
+  <div class="wms-card metric-card">
+    <div class="metric-header">
+      <span class="metric-label">ASSIGNED PICKS QUEUE</span>
+      <span class="trend-badge urgent">Priority Wave</span>
+    </div>
+    <div class="metric-body">
+      <div class="metric-value font-mono">{{ data?.pendingPicksCount ?? 6 }} <span class="unit-text">Tasks</span></div>
+      <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+        <path d="M0,22 Q20,15 40,18 T70,8 T100,4" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M0,22 Q20,15 40,18 T70,8 T100,4 L100,30 L0,30 Z" fill="rgba(37,99,235,0.08)" />
+      </svg>
+    </div>
+    <div class="metric-footer">
+      <span class="footer-highlight">Aisles A-01 to A-04</span>
+      <span class="footer-subtext">zone pick sequence</span>
+    </div>
+  </div>
+
+  <!-- Card 2: Completed Picks Today -->
+  <div class="wms-card metric-card">
+    <div class="metric-header">
+      <span class="metric-label">COMPLETED PICKS TODAY</span>
+      <span class="trend-badge positive">+12 vs shift avg</span>
+    </div>
+    <div class="metric-body">
+      <div class="metric-value font-mono">{{ data?.completedPicksToday ?? 34 }} <span class="unit-text">Picks</span></div>
+      <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+        <path d="M0,18 Q25,24 50,14 T75,12 T100,6" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M0,18 Q25,24 50,14 T75,12 T100,6 L100,30 L0,30 Z" fill="rgba(16,185,129,0.08)" />
+      </svg>
+    </div>
+    <div class="metric-footer">
+      <span class="footer-highlight">Tote Consolidation</span>
+      <span class="footer-subtext">staged at Packing Zone C</span>
+    </div>
+  </div>
+
+  <!-- Card 3: Pending Putaway Tasks -->
+  <div class="wms-card metric-card">
+    <div class="metric-header">
+      <span class="metric-label">DIRECTED PUTAWAYS</span>
+      <span class="tag-pill">Dock Inbound</span>
+    </div>
+    <div class="metric-body">
+      <div class="metric-value font-mono">{{ data?.pendingPutawayTasks ?? 4 }} <span class="unit-text">Pallets</span></div>
+      <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+        <path d="M0,15 Q20,8 40,12 T70,5 T100,8" fill="none" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M0,15 Q20,8 40,12 T70,5 T100,8 L100,30 L0,30 Z" fill="rgba(249,115,22,0.08)" />
+      </svg>
+    </div>
+    <div class="metric-footer">
+      <span class="footer-highlight">Dock Bay 01</span>
+      <span class="footer-subtext">PO-9481 inspection cleared</span>
+    </div>
+  </div>
+
+  <!-- Card 4: Accuracy & Velocity -->
+  <div class="wms-card metric-card">
+    <div class="metric-header">
+      <span class="metric-label">PICK ACCURACY RATE</span>
+      <span class="tag-pill accuracy">Top Tier</span>
+    </div>
+    <div class="metric-body">
+      <div class="metric-value font-mono">{{ ((data?.pickAccuracyRate || 0.994) * 100) | number:'1.1-1' }}%</div>
+      <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none">
+        <path d="M0,28 Q30,22 60,25 T90,26 T100,27" fill="none" stroke="#8B5CF6" stroke-width="2.5" stroke-linecap="round" />
+        <path d="M0,28 Q30,22 60,25 T90,26 T100,27 L100,30 L0,30 Z" fill="rgba(139,92,246,0.08)" />
+      </svg>
+    </div>
+    <div class="metric-footer">
+      <span class="footer-highlight">{{ data?.picksPerHour ?? 42.5 }} Picks/hr</span>
+      <span class="footer-subtext">zero mis-scans</span>
+    </div>
+  </div>
+</div>

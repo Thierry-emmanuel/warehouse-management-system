@@ -1,0 +1,111 @@
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.metric-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.trend-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.125rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.trend-badge.urgent {
+  background-color: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.trend-badge.positive {
+  background-color: var(--status-success-light);
+  color: var(--status-success-text);
+}
+
+.tag-pill {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  background-color: var(--canvas-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.tag-pill.accuracy {
+  background-color: #F3E8FF;
+  color: #7C3AED;
+  border-color: #DDD6FE;
+}
+
+.metric-body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.metric-value {
+  font-size: 1.625rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1;
+}
+
+.unit-text {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.sparkline {
+  width: 85px;
+  height: 26px;
+}
+
+.metric-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.625rem;
+}
+
+.footer-highlight {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.footer-subtext {
+  color: var(--text-muted);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}

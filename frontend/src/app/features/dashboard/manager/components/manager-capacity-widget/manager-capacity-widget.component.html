@@ -1,0 +1,29 @@
+<div class="wms-card capacity-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Storage Zone Capacity & Physical Fill Rates</h3>
+      <p class="card-subtitle">Volumetric distribution across facility storage sectors</p>
+    </div>
+    <span class="badge badge-primary">{{ (capacityUsage * 100) | number:'1.0-0' }}% Overall Fill</span>
+  </div>
+
+  <div class="zone-breakdown-list">
+    @for (z of zones; track z.code) {
+      <div class="zone-item">
+        <div class="zone-meta">
+          <div class="zone-names">
+            <span class="zone-title">{{ z.name }}</span>
+            <span class="zone-code font-mono">{{ z.code }}</span>
+          </div>
+          <div class="zone-stats">
+            <span class="zone-fill-text">{{ z.fill }}% Full</span>
+            <span class="zone-max font-mono">({{ z.max }})</span>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill {{ z.barColor }}" [style.width.%]="z.fill"></div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

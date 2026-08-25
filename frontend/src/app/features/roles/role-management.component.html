@@ -1,0 +1,59 @@
+<div class="roles-page">
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span>SECURITY TIERS</span>
+      </div>
+      <h1 class="page-title">Role-Based Access Control (RBAC) & Privileges</h1>
+      <p class="page-subtitle">Dynamic roles, granular permission matrices, and security policy authoring</p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-primary" (click)="openModal()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Author New Role</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="roles-grid">
+    @for (r of roles(); track r.id) {
+      <div class="wms-card role-card">
+        <div class="role-header">
+          <div class="role-title-block">
+            <h3 class="role-name font-mono">{{ r.name }}</h3>
+            <span class="badge {{ r.isSystemRole ? 'badge-primary' : 'badge-warning' }}">
+              {{ r.isSystemRole ? 'System Protected' : 'Custom Authoring' }}
+            </span>
+          </div>
+          <span class="user-count font-mono">{{ r.userCount }} Operators</span>
+        </div>
+
+        <p class="role-desc">{{ r.description || 'No description specified for this security role.' }}</p>
+
+        <div class="permissions-chips">
+          <span class="perms-label">Permissions Attached</span>
+          <span class="badge badge-primary font-mono">{{ r.permissionCount }} Granular Actions</span>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty-state">
+        @if (isLoading()) {
+          <span>Loading RBAC profiles...</span>
+        } @else {
+          <span>No roles registered in database.</span>
+        }
+      </div>
+    }
+  </div>
+
+  <app-role-modal
+    [isOpen]="isModalOpen()"
+    [permissions]="permissions()"
+    (close)="closeModal()"
+    (save)="onSaveRole($event)"
+  ></app-role-modal>
+</div>

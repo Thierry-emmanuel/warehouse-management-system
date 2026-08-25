@@ -1,0 +1,52 @@
+<div class="wms-card queue-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Assigned Priority Tasks & Pick Routing</h3>
+      <p class="card-subtitle">Active wave picks and putaways assigned to current operator shift</p>
+    </div>
+    <span class="badge badge-primary">{{ tasks.length }} Queued</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="wms-table">
+      <thead>
+        <tr>
+          <th>Mission ID</th>
+          <th>Action Type</th>
+          <th>Bin Location</th>
+          <th>SKU Code</th>
+          <th>Target Qty</th>
+          <th class="text-right">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (t of tasks; track t['taskId']) {
+          <tr>
+            <td>
+              <span class="font-mono taskId-pill">{{ t['taskId'] }}</span>
+            </td>
+            <td>
+              <span class="badge {{ t['type'] === 'PICK' ? 'badge-primary' : 'badge-warning' }}">{{ t['type'] }}</span>
+            </td>
+            <td>
+              <span class="font-mono location-text">{{ t['binLocation'] }}</span>
+            </td>
+            <td>
+              <span class="sku-text font-mono">{{ t['sku'] }}</span>
+            </td>
+            <td>
+              <span class="font-mono qty-num">{{ t['qty'] }} units</span>
+            </td>
+            <td class="text-right">
+              <button class="btn-direct-scan">Direct Scan</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">No urgent tasks pending for this terminal.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

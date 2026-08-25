@@ -1,0 +1,48 @@
+<div class="dashboard-page">
+  <!-- Error Alert Banner -->
+  @if (errorMessage()) {
+    <div class="error-banner">
+      <span class="error-text">{{ errorMessage() }}</span>
+      <button class="btn-retry" (click)="loadEmployeeData()">Retry</button>
+    </div>
+  }
+
+  <!-- Top Action Header -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">OPERATOR TERMINAL #4 • WH-0{{ employeeData()?.warehouseId || 1 }}</span>
+      </div>
+      <h1 class="page-title">Floor Operations & Scanner Hub</h1>
+      <p class="page-subtitle">Directed wave picking, putaway workflows & rapid tote barcode validation</p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-secondary" (click)="loadEmployeeData()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Refresh Missions</span>
+      </button>
+      <button class="btn-primary">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Next Wave Batch</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Employee KPI Row -->
+  <app-employee-kpi-row [data]="employeeData()"></app-employee-kpi-row>
+
+  <!-- Interactive Rugged Barcode Scanner Panel -->
+  <app-employee-scanner-panel (scanComplete)="onScanComplete($event)"></app-employee-scanner-panel>
+
+  <!-- Assigned Priority Task Queue -->
+  <app-employee-task-queue [tasks]="employeeData()?.urgentTasks || []"></app-employee-task-queue>
+
+  <!-- High-Bay Rack Cell Visualizer -->
+  <app-admin-rack-visualizer></app-admin-rack-visualizer>
+</div>

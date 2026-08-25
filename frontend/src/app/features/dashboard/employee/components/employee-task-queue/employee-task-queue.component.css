@@ -1,0 +1,85 @@
+.queue-card {
+  padding: 0;
+  overflow: hidden;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.25rem;
+}
+
+.card-header {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.card-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.125rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.taskId-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  background-color: var(--primary-blue-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.location-text {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.sku-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.qty-num {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn-direct-scan {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-direct-scan:hover {
+  background-color: var(--primary-blue-hover);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}

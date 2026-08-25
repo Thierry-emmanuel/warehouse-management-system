@@ -1,0 +1,106 @@
+<div class="users-page">
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span>ACCESS DIRECTORY</span>
+      </div>
+      <h1 class="page-title">Warehouse Staff & Operator Management</h1>
+      <p class="page-subtitle">User provisioning, facility scoping, and dynamic role assignments</p>
+    </div>
+
+    <div class="top-actions">
+      <div class="search-box">
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Filter by name, username, or email..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearch()"
+        />
+      </div>
+      <button class="btn-primary" (click)="openModal()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Provision Operator</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="wms-card table-card">
+    <div class="table-responsive">
+      <table class="wms-table">
+        <thead>
+          <tr>
+            <th>Operator</th>
+            <th>Username</th>
+            <th>Assigned Roles</th>
+            <th>Facility ID</th>
+            <th>Account Status</th>
+            <th>Created Date</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users(); track u.id) {
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar-pill">{{ u.fullName.substring(0, 2).toUpperCase() }}</div>
+                  <div class="user-names">
+                    <span class="full-name">{{ u.fullName }}</span>
+                    <span class="email-sub">{{ u.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="code-pill font-mono">{{ u.username }}</span></td>
+              <td>
+                <div class="role-pills">
+                  @for (role of u.roleNames; track role) {
+                    <span class="badge badge-primary">{{ role }}</span>
+                  }
+                </div>
+              </td>
+              <td><span class="facility-code font-mono">WH-0{{ u.warehouseId }}</span></td>
+              <td>
+                @if (u.isActive) {
+                  <span class="badge badge-success">Active</span>
+                } @else {
+                  <span class="badge badge-danger">Suspended</span>
+                }
+              </td>
+              <td><span class="date-text">{{ u.createdAt | date:'mediumDate' }}</span></td>
+              <td class="text-right">
+                <button
+                  class="btn-toggle"
+                  [class.btn-suspend]="u.isActive"
+                  (click)="toggleStatus(u)"
+                >
+                  {{ u.isActive ? 'Deactivate' : 'Activate' }}
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-state">
+                @if (isLoading()) {
+                  <span>Loading operators directory...</span>
+                } @else {
+                  <span>No operators registered in database.</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-user-modal
+    [isOpen]="isModalOpen()"
+    [availableRoles]="availableRoles()"
+    (close)="closeModal()"
+    (save)="onSaveUser($event)"
+  ></app-user-modal>
+</div>

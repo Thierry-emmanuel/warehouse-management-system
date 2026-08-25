@@ -1,0 +1,58 @@
+<div class="dashboard-page">
+  <!-- Error Alert Banner -->
+  @if (errorMessage()) {
+    <div class="error-banner">
+      <span class="error-text">{{ errorMessage() }}</span>
+      <button class="btn-retry" (click)="loadManagerData()">Retry</button>
+    </div>
+  }
+
+  <!-- Top Action Header -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">FACILITY WH-0{{ managerData()?.warehouseId || 1 }}</span>
+      </div>
+      <h1 class="page-title">Warehouse Manager Supply Chain Hub</h1>
+      <p class="page-subtitle">Inventory valuation, inbound dock receiving queues & capacity allocation</p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-secondary" (click)="loadManagerData()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Refresh Supply Chain</span>
+      </button>
+      <button class="btn-primary">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <span>Export Valuation Report</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Manager Top 4 KPI Metrics -->
+  <app-manager-metrics-row [data]="managerData()"></app-manager-metrics-row>
+
+  <!-- 2-Column Section: Capacity Usage & Operational Alerts -->
+  <div class="manager-split-grid">
+    <app-manager-capacity-widget [capacityUsage]="managerData()?.warehouseCapacityUsage || 0.82"></app-manager-capacity-widget>
+    <app-manager-alerts-feed [alerts]="managerData()?.operationalAlerts || []"></app-manager-alerts-feed>
+  </div>
+
+  <!-- High-Bay Rack Visualizer -->
+  <app-admin-rack-visualizer></app-admin-rack-visualizer>
+
+  <!-- 2-Column Analytics (Movement Heatmap Grid & Monthly Inflow/Outflow Chart) -->
+  <div class="analytics-row-grid">
+    <div class="col-heatmap">
+      <app-admin-activity-heatmap></app-admin-activity-heatmap>
+    </div>
+    <div class="col-chart">
+      <app-admin-trend-chart></app-admin-trend-chart>
+    </div>
+  </div>
+</div>
