@@ -1,0 +1,57 @@
+<div class="distribution-grid">
+  <!-- Left Card: User Role Allocation -->
+  <div class="wms-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Staff Role Distribution</h3>
+        <p class="card-subtitle">Active access tier allocation across operators</p>
+      </div>
+      <span class="facility-badge-small">WH-MAIN-01</span>
+    </div>
+
+    <div class="role-list">
+      @for (role of roles; track role.roleCode) {
+        <div class="role-item">
+          <div class="role-info">
+            <div class="role-names">
+              <span class="role-title">{{ role.name }}</span>
+              <span class="role-code">{{ role.roleCode }}</span>
+            </div>
+            <div class="role-stats">
+              <span class="role-count">{{ role.count }} users</span>
+              <span class="role-percentage">{{ role.percentage }}%</span>
+            </div>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill {{ role.colorClass }}" [style.width.%]="role.percentage"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Right Card: Permission Breakdown -->
+  <div class="wms-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Permission Category Matrix</h3>
+        <p class="card-subtitle">Granular action privileges registered in domain</p>
+      </div>
+      <span class="policy-badge">17 Total</span>
+    </div>
+
+    <div class="category-grid">
+      @for (cat of permissionCategories; track cat.name) {
+        <div class="category-card">
+          <div class="category-meta">
+            <span class="category-name">{{ cat.name }}</span>
+            <span class="category-count {{ cat.badgeClass }}">{{ cat.count }} perms</span>
+          </div>
+          <div class="category-bar">
+            <div class="cat-progress {{ cat.badgeClass }}"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

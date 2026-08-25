@@ -1,0 +1,48 @@
+<aside class="wms-sidebar">
+  <!-- Brand Header -->
+  <div class="brand-container">
+    <div class="brand-logo-badge">
+      <svg class="brand-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">LogistiQ</span>
+      <span class="brand-edition">Enterprise WMS</span>
+    </div>
+  </div>
+
+  <!-- Section Label -->
+  <div class="nav-section-label">MAIN NAVIGATION</div>
+
+  <!-- Navigation Menu -->
+  <nav class="nav-list">
+    @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" routerLinkActive="active" class="nav-link">
+        <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
+        </svg>
+        <span class="nav-label">{{ item.label }}</span>
+        @if (item.badge) {
+          <span class="nav-badge">{{ item.badge }}</span>
+        }
+      </a>
+    }
+  </nav>
+
+  <!-- Bottom User Profile Card -->
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar-pill">{{ userInitials }}</div>
+      <div class="user-meta">
+        <span class="user-name">{{ authService.currentUser()?.fullName || 'System Administrator' }}</span>
+        <span class="user-role">{{ authService.currentUser()?.roles?.[0] || 'ROLE_ADMIN' }}</span>
+      </div>
+      <button class="logout-btn" (click)="logout()" title="Logout">
+        <svg class="logout-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</aside>

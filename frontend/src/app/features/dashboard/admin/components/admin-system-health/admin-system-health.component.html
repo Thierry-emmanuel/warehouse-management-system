@@ -1,0 +1,58 @@
+<div class="health-grid">
+  <!-- Gateway & Scanner Fleet -->
+  <div class="wms-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">IoT Gateways & Handheld Scanner Network</h3>
+        <p class="card-subtitle">Real-time floor mesh network latency & active terminal telemetry</p>
+      </div>
+      <span class="badge badge-success">4 Nodes Connected</span>
+    </div>
+
+    <div class="gateway-list">
+      @for (gw of gateways; track gw.id) {
+        <div class="gateway-row">
+          <div class="gw-ident">
+            <span class="gw-id">{{ gw.id }}</span>
+            <span class="gw-location">{{ gw.location }}</span>
+          </div>
+          <div class="gw-metrics">
+            <span class="gw-terminals">{{ gw.devices }} Handhelds</span>
+            <span class="gw-latency">{{ gw.latency }}</span>
+            <span class="badge badge-success">{{ gw.status }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Database & Core Engine Health -->
+  <div class="wms-card">
+    <div class="card-header">
+      <div>
+        <h3 class="card-title">Database & Lock Health Telemetry</h3>
+        <p class="card-subtitle">High-throughput concurrency and JPA batch metrics</p>
+      </div>
+      <span class="badge badge-primary">HikariCP 5.1</span>
+    </div>
+
+    <div class="db-metrics-list">
+      <div class="db-stat-item">
+        <span class="stat-name">Connection Pool Capacity</span>
+        <span class="stat-val font-mono">10 Active / 40 Idle (Max 50)</span>
+      </div>
+      <div class="db-stat-item">
+        <span class="stat-name">Average Query Latency</span>
+        <span class="stat-val font-mono">&lt; 3.2ms</span>
+      </div>
+      <div class="db-stat-item">
+        <span class="stat-name">Optimistic Lock Contention</span>
+        <span class="stat-val font-mono">0.01% (Zero deadlocks)</span>
+      </div>
+      <div class="db-stat-item">
+        <span class="stat-name">JWT Session Signature</span>
+        <span class="stat-val font-mono">HMAC-SHA256 (Stateless)</span>
+      </div>
+    </div>
+  </div>
+</div>

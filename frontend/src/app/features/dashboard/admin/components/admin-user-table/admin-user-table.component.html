@@ -1,0 +1,109 @@
+<div class="wms-card table-card">
+  <!-- Table Header & Controls -->
+  <div class="table-header">
+    <div class="header-titles">
+      <h3 class="table-title">Registered Warehouse Operators & Staff</h3>
+      <span class="user-count-tag">{{ users.length }} Displayed</span>
+    </div>
+
+    <div class="table-actions">
+      <!-- Search Input -->
+      <div class="search-wrapper">
+        <svg class="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Filter by name, username, or email..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearch()"
+        />
+      </div>
+
+      <button class="btn-primary">
+        <svg class="btn-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>Provision User</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Body -->
+  <div class="table-responsive">
+    <table class="wms-table">
+      <thead>
+        <tr>
+          <th>Operator</th>
+          <th>Username</th>
+          <th>Assigned Roles</th>
+          <th>Facility ID</th>
+          <th>Account Status</th>
+          <th>Created Date</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>
+              <div class="user-cell">
+                <div class="avatar-badge {{ getAvatarColor(user.fullName) }}">
+                  {{ getInitials(user.fullName) }}
+                </div>
+                <div class="user-names">
+                  <span class="full-name">{{ user.fullName }}</span>
+                  <span class="email-sub">{{ user.email }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="code-pill">{{ user.username }}</span>
+            </td>
+            <td>
+              <div class="role-pills">
+                @for (role of user.roleNames; track role) {
+                  <span class="badge badge-primary">{{ role }}</span>
+                }
+              </div>
+            </td>
+            <td>
+              <span class="facility-code">WH-0{{ user.warehouseId }}</span>
+            </td>
+            <td>
+              @if (user.isActive) {
+                <span class="badge badge-success">Active</span>
+              } @else {
+                <span class="badge badge-danger">Suspended</span>
+              }
+            </td>
+            <td>
+              <span class="date-text">{{ user.createdAt | date:'mediumDate' }}</span>
+            </td>
+            <td class="text-right">
+              <button
+                class="status-toggle-btn"
+                [class.deactivate]="user.isActive"
+                (click)="onToggleStatus(user)"
+                [title]="user.isActive ? 'Deactivate user' : 'Activate user'"
+              >
+                {{ user.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="empty-state">
+              @if (isLoading) {
+                <span>Loading operator directory...</span>
+              } @else {
+                <span>No users match the search criteria.</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
