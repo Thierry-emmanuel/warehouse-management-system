@@ -8,6 +8,9 @@ import { EmployeeDashboardComponent } from './features/dashboard/employee/employ
 import { UserManagementComponent } from './features/users/user-management.component';
 import { RoleManagementComponent } from './features/roles/role-management.component';
 import { CategoryManagementComponent } from './features/categories/category-management.component';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { dashboardRedirectGuard } from './core/guards/dashboard-redirect.guard';
 
 export const routes: Routes = [
   {
@@ -23,40 +26,60 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
-        redirectTo: 'dashboard/admin',
-        pathMatch: 'full'
+        pathMatch: 'full',
+        canActivate: [dashboardRedirectGuard],
+        children: []
+      },
+      {
+        path: 'dashboard',
+        pathMatch: 'full',
+        canActivate: [dashboardRedirectGuard],
+        children: []
       },
       {
         path: 'dashboard/admin',
         component: AdminDashboardComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN'] },
         title: 'LogistiQ — Admin Dashboard'
       },
       {
         path: 'dashboard/manager',
         component: ManagerDashboardComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_MANAGER', 'ROLE_ADMIN'] },
         title: 'LogistiQ — Manager Dashboard'
       },
       {
         path: 'dashboard/employee',
         component: EmployeeDashboardComponent,
-        title: 'LogistiQ — Floor Scanner Dashboard'
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_EMPLOYEE', 'ROLE_SUPERVISOR', 'ROLE_MANAGER', 'ROLE_ADMIN'] },
+        title: 'LogistiQ — My Dedicated Floor Dashboard'
       },
       {
         path: 'users',
         component: UserManagementComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN'] },
         title: 'LogistiQ — Staff & Operators'
       },
       {
         path: 'roles',
         component: RoleManagementComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN'] },
         title: 'LogistiQ — RBAC Roles & Privileges'
       },
       {
         path: 'categories',
         component: CategoryManagementComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER'] },
         title: 'LogistiQ — SKU Category Taxonomy'
       }
     ]

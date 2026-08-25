@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../../core/services/dashboard.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { EmployeeDashboardResponse } from '../../../core/models/dashboard.models';
 import { EmployeeKpiRowComponent } from './components/employee-kpi-row/employee-kpi-row.component';
 import { EmployeeScannerPanelComponent } from './components/employee-scanner-panel/employee-scanner-panel.component';
@@ -22,6 +23,8 @@ import { AdminRackVisualizerComponent } from '../admin/components/admin-rack-vis
 })
 export class EmployeeDashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
+  authService = inject(AuthService);
+
   employeeData = signal<EmployeeDashboardResponse | null>(null);
   isLoading = signal<boolean>(true);
   errorMessage = signal<string | null>(null);

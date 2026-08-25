@@ -13,12 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/dashboards")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Dashboards", description = "Endpoints for role-tailored dashboards and operational metrics (Admin, Manager, Employee)")
 @SecurityRequirement(name = "BearerAuth")
 public class DashboardController {

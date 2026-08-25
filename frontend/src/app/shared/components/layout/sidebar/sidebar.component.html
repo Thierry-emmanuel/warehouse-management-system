@@ -13,11 +13,11 @@
   </div>
 
   <!-- Section Label -->
-  <div class="nav-section-label">MAIN NAVIGATION</div>
+  <div class="nav-section-label">ASSIGNED NAVIGATION</div>
 
   <!-- Navigation Menu -->
   <nav class="nav-list">
-    @for (item of navItems; track item.route) {
+    @for (item of navItems(); track item.route) {
       <a [routerLink]="item.route" routerLinkActive="active" class="nav-link">
         <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
@@ -35,10 +35,10 @@
     <div class="user-card">
       <div class="user-avatar-pill">{{ userInitials }}</div>
       <div class="user-meta">
-        <span class="user-name">{{ authService.currentUser()?.fullName || 'System Administrator' }}</span>
-        <span class="user-role">{{ authService.currentUser()?.roles?.[0] || 'ROLE_ADMIN' }}</span>
+        <span class="user-name">{{ authService.currentUser()?.fullName || 'Active Operator' }}</span>
+        <span class="user-role">{{ friendlyRoleTitle }}</span>
       </div>
-      <button class="logout-btn" (click)="logout()" title="Logout">
+      <button class="logout-btn" (click)="logout()" title="Sign Out">
         <svg class="logout-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
         </svg>
