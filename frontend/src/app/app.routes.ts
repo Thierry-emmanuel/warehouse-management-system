@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './shared/components/layout/main-layout/main-layout.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { RegisterComponent } from './features/auth/register/register.component';
 import { AdminDashboardComponent } from './features/dashboard/admin/admin-dashboard.component';
 import { ManagerDashboardComponent } from './features/dashboard/manager/manager-dashboard.component';
 import { EmployeeDashboardComponent } from './features/dashboard/employee/employee-dashboard.component';
@@ -8,6 +10,16 @@ import { RoleManagementComponent } from './features/roles/role-management.compon
 import { CategoryManagementComponent } from './features/categories/category-management.component';
 
 export const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'LogistiQ — Operator Terminal Sign In'
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'LogistiQ — Onboard Operator'
+  },
   {
     path: '',
     component: MainLayoutComponent,
@@ -51,6 +63,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'dashboard/admin'
+    redirectTo: 'login'
   }
 ];

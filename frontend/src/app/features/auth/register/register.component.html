@@ -1,0 +1,121 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <!-- Brand Header -->
+    <div class="auth-header">
+      <div class="brand-badge">
+        <svg class="brand-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+        </svg>
+      </div>
+      <div class="header-titles">
+        <h1 class="brand-title">Onboard Operator</h1>
+        <p class="brand-subtitle">Warehouse Management Access & Floor Privileges</p>
+      </div>
+    </div>
+
+    <!-- Error Banner -->
+    @if (errorMessage()) {
+      <div class="error-banner">
+        <svg class="error-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="error-text">{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <!-- Registration Form -->
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="username">Username *</label>
+          <input
+            type="text"
+            id="username"
+            class="form-input"
+            placeholder="e.g. john.doe"
+            [(ngModel)]="formData.username"
+            name="username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="fullName">Full Name *</label>
+          <input
+            type="text"
+            id="fullName"
+            class="form-input"
+            placeholder="e.g. John Doe"
+            [(ngModel)]="formData.fullName"
+            name="fullName"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Work Email *</label>
+        <input
+          type="email"
+          id="email"
+          class="form-input"
+          placeholder="john.doe@logistiq.com"
+          [(ngModel)]="formData.email"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" for="password">Password *</label>
+          <input
+            type="password"
+            id="password"
+            class="form-input"
+            placeholder="••••••••••••"
+            [(ngModel)]="formData.password"
+            name="password"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="phone">Phone Contact</label>
+          <input
+            type="text"
+            id="phone"
+            class="form-input"
+            placeholder="+1 (555) 019-2831"
+            [(ngModel)]="formData.phoneNumber"
+            name="phone"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="warehouseId">Assigned Facility Node *</label>
+        <select id="warehouseId" class="form-input" [(ngModel)]="formData.warehouseId" name="warehouseId">
+          <option [value]="1">WH-MAIN-01 (Central Logistics Distribution)</option>
+          <option [value]="2">WH-NORTH-02 (Cold Storage & Perishables)</option>
+          <option [value]="3">WH-EAST-03 (Regional Transit & Cross-Dock)</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="isLoading()">
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          <span>Creating Operator Account...</span>
+        } @else {
+          <span>Register & Start Shift</span>
+        }
+      </button>
+    </form>
+
+    <!-- Footer Links -->
+    <div class="auth-footer">
+      <span>Already have active credentials?</span>
+      <a routerLink="/login" class="link-login">Sign in to Terminal</a>
+    </div>
+  </div>
+</div>
