@@ -2,11 +2,36 @@
 
 This repository contains an enterprise platform for warehouse managers and floor employees to manage inventories, warehouses, stock, orders, and operations.
 
+## Workspace Layout
+
+```
+warehouse-management-system/
+├── backend/                      # Spring Boot 3.4.2 REST API
+│   ├── src/main/java/Warehousemanagement/project/
+│   │   ├── common/               # Shared models, DTOs, exceptions, OpenAPI
+│   │   ├── security/             # Dynamic RBAC, Users, Roles, Permissions, JWT
+│   │   ├── category/             # SKU Category classification
+│   │   └── dashboard/            # Admin, Manager, Employee dashboards
+│   └── pom.xml
+│
+├── frontend/                     # Angular 19+ SPA (LogistiQ & DockSync standard)
+│   ├── src/app/
+│   │   ├── core/                 # Auth services, JWT interceptors, models
+│   │   ├── shared/               # Reusable components & utilities
+│   │   └── features/             # Business modules (auth, dashboards, etc.)
+│   └── angular.json
+│
+├── .agents/                      # Agent skills & directives (git-ignored)
+├── .gitignore
+└── AGENTS.md
+```
+
 ## Core Directives & Hard Constraints
 
 1. **Feature-Modular Domain Architecture**:
-   - Structure the codebase by feature/domain modules (e.g. `common/`, `security/`, `category/`, `product/`, `inventory/`, `dashboard/`).
-   - Inside each feature folder, maintain strict separation of concerns (`controller`, `dto`, `mapper`, `model`, `enums`, `service`, `repository`).
+   - Backend is partitioned by domain modules (`common/`, `security/`, `category/`, `product/`, `inventory/`, `dashboard/`).
+   - Frontend is partitioned by feature modules (`core/`, `shared/`, `features/`).
+   - Inside each backend feature folder, maintain strict separation of concerns (`controller`, `dto`, `mapper`, `model`, `enums`, `service`, `repository`).
 2. **Design System & Visual Consistency (LogistiQ & DockSync Standard)**:
    - Strictly follow the enterprise logistics design language specified in `wms-ui-ux-guidelines`.
    - Use crisp white surface cards (`#FFFFFF`) with 1px border (`#E5E7EB`) over soft canvas background (`#F4F5F7`).
