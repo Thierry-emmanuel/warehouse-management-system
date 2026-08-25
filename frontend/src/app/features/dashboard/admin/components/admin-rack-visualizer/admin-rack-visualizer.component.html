@@ -18,7 +18,7 @@
     <div class="grid-side">
       <div class="shelf-tier-label">LEVEL 3 (Top Overstock)</div>
       <div class="bins-row">
-        @for (b of bins.slice(8, 12); track b.binCode) {
+        @for (b of bins().slice(8, 12); track b.binCode) {
           <div
             class="bin-box {{ b.status.toLowerCase() }}"
             [class.selected]="selectedBin()?.binCode === b.binCode"
@@ -33,7 +33,7 @@
 
       <div class="shelf-tier-label">LEVEL 2 (Secondary Storage)</div>
       <div class="bins-row">
-        @for (b of bins.slice(4, 8); track b.binCode) {
+        @for (b of bins().slice(4, 8); track b.binCode) {
           <div
             class="bin-box {{ b.status.toLowerCase() }}"
             [class.selected]="selectedBin()?.binCode === b.binCode"
@@ -48,7 +48,7 @@
 
       <div class="shelf-tier-label">LEVEL 1 (Active Fast-Pick)</div>
       <div class="bins-row">
-        @for (b of bins.slice(0, 4); track b.binCode) {
+        @for (b of bins().slice(0, 4); track b.binCode) {
           <div
             class="bin-box {{ b.status.toLowerCase() }}"
             [class.selected]="selectedBin()?.binCode === b.binCode"

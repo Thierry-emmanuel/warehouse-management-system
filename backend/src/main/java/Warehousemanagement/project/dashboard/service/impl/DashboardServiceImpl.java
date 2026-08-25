@@ -107,7 +107,7 @@ public class DashboardServiceImpl implements DashboardService {
         long totalSkus = productRepository.countByIsActiveTrue();
 
         Double valuation = inventoryItemRepository.calculateTotalInventoryValuation(effectiveWarehouseId);
-        BigDecimal totalValuation = valuation != null ? BigDecimal.valueOf(valuation) : new BigDecimal("485230.50");
+        BigDecimal totalValuation = valuation != null ? BigDecimal.valueOf(valuation) : BigDecimal.ZERO;
 
         long pendingPos = purchaseOrderRepository.countByWarehouseIdAndStatus(effectiveWarehouseId, PurchaseOrderStatus.CONFIRMED);
         long activeWaves = salesOrderRepository.countByWarehouseIdAndStatus(effectiveWarehouseId, SalesOrderStatus.ALLOCATED);
@@ -123,18 +123,23 @@ public class DashboardServiceImpl implements DashboardService {
         weeklyTrends.put("Saturday", 210L);
         weeklyTrends.put("Sunday", 95L);
 
-        List<String> alerts = List.of(
-            "Zone B (Cold Storage) capacity reaches 88%",
-            "Purchase Order PO-9481 pending dock inspection",
-            "SKU-4890 stock falls below reorder point (15 remaining, minimum 50)"
-        );
+        List<String> alerts = new ArrayList<>();
+        if (pendingPos > 0) {
+            alerts.add("Pending Inbound: " + pendingPos + " confirmed purchase orders awaiting dock receipt.");
+        }
+        if (activeWaves > 0) {
+            alerts.add("Active Wave Picking: " + activeWaves + " allocated sales orders ready for zone pickers.");
+        }
+        if (alerts.isEmpty()) {
+            alerts.add("Facility operations normal. All inbound dock appointments and outbound waves on schedule.");
+        }
 
         return new ManagerDashboardResponse(
             effectiveWarehouseId,
-            totalSkus > 0 ? totalSkus : 1240L,
+            totalSkus,
             totalValuation,
-            pendingPos > 0 ? pendingPos : 8L,
-            activeWaves > 0 ? activeWaves : 14L,
+            pendingPos,
+            activeWaves,
             0.76,
             0.82,
             heatmap,
@@ -147,41 +152,41 @@ public class DashboardServiceImpl implements DashboardService {
     @Transactional(readOnly = true)
     public EmployeeDashboardResponse getEmployeeDashboard(Long warehouseId, String employeeName) {
         Long effectiveWarehouseId = warehouseId != null ? warehouseId : 1L;
-        String operator = employeeName != null ? employeeName : "employee";
+        String operator = (employeeName != null && !employeeName.isBlank()) ? employeeName : "employee";
 
         List<PickTask> tasks = pickTaskRepository.findByAssignedOperatorUsernameAndStatus(operator, PickTaskStatus.PENDING);
-        List<Map<String, Object>> urgentTasks = new ArrayList<>();
+        if (tasks.isEmpty()) {
+            tasks = pickTaskRepository.findByStatus(PickTaskStatus.PENDING);
+        }
 
+        List<Map<String, Object>> urgentTasks = new ArrayList<>();
         for (PickTask t : tasks) {
             urgentTasks.add(Map.of(
                 "taskId", t.getTaskCode(),
                 "type", "PICK",
-                "binLocation", t.getSourceLocation() != null ? t.getSourceLocation().getCode() : "WH1-Z01-A02-S1-B03",
-                "sku", t.getProduct() != null ? t.getProduct().getSku() : "ELEC-AUDIO-01",
-                "qty", t.getTargetQuantity()
+                "binLocation", t.getSourceLocation() != null ? t.getSourceLocation().getCode() : "WH1-Z01-A01-S1-B01",
+                "sku", t.getProduct() != null ? t.getProduct().getSku() : "N/A",
+                "qty", t.getTargetQuantity() - t.getPickedQuantity()
             ));
         }
 
-        if (urgentTasks.isEmpty()) {
-            urgentTasks.add(Map.of("taskId", "WAVE-091", "type", "PICK", "binLocation", "WH1-Z01-A02-S1-B03", "sku", "ELEC-AUDIO-01", "qty", 12));
-            urgentTasks.add(Map.of("taskId", "WAVE-094", "type", "PUTAWAY", "binLocation", "WH1-DOCK-BAY-01", "sku", "MECH-GEAR-08", "qty", 40));
-        }
+        long completedPicks = pickTaskRepository.countByAssignedOperatorUsernameAndStatus(operator, PickTaskStatus.COMPLETED);
 
         List<String> shortcuts = List.of(
-            "F1: Fast Barcode Scan",
+            "F1: Fast Laser Barcode Scan",
             "F2: Bin Exception Flag",
-            "F3: Print Tote Label",
-            "F4: Next Pick in Routing Sequence"
+            "F3: Print Tote Shipping Label",
+            "F4: Next Pick in Sequence Route"
         );
 
         return new EmployeeDashboardResponse(
             operator,
             effectiveWarehouseId,
             (long) urgentTasks.size(),
-            34L,
-            4L,
-            0.994,
-            42.5,
+            completedPicks,
+            2L,
+            0.998,
+            38.0,
             urgentTasks,
             shortcuts
         );

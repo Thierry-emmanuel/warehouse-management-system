@@ -10,7 +10,7 @@ import { AdminActivityHeatmapComponent } from './components/admin-activity-heatm
 import { AdminTrendChartComponent } from './components/admin-trend-chart/admin-trend-chart.component';
 import { AdminRackVisualizerComponent } from './components/admin-rack-visualizer/admin-rack-visualizer.component';
 import { AdminRoleDistributionComponent } from './components/admin-role-distribution/admin-role-distribution.component';
-import { AdminDenseTableComponent } from './components/admin-dense-table/admin-dense-table.component';
+import { AdminUserTableComponent } from './components/admin-user-table/admin-user-table.component';
 import { AdminSystemHealthComponent } from './components/admin-system-health/admin-system-health.component';
 
 @Component({
@@ -23,7 +23,7 @@ import { AdminSystemHealthComponent } from './components/admin-system-health/adm
     AdminTrendChartComponent,
     AdminRackVisualizerComponent,
     AdminRoleDistributionComponent,
-    AdminDenseTableComponent,
+    AdminUserTableComponent,
     AdminSystemHealthComponent
   ],
   templateUrl: './admin-dashboard.component.html',
@@ -53,7 +53,7 @@ export class AdminDashboardComponent implements OnInit {
       next: () => {
         this.fetchLiveMetrics();
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
         this.errorMessage.set('Authentication failed. Unable to establish secure session with backend API.');
       }
@@ -68,13 +68,25 @@ export class AdminDashboardComponent implements OnInit {
           this.dashboardData.set(res.data);
         }
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
         this.errorMessage.set('Failed to load live admin telemetry from backend at http://localhost:8080.');
       }
     });
 
-    this.userService.getUsers(0, 20).subscribe({
+    this.dashboardService.getManagerDashboard().subscribe({
+      next: (res) => {
+        if (res && res.success && res.data) {
+          this.managerData.set(res.data);
+        }
+      }
+    });
+
+    this.loadUsers();
+  }
+
+  loadUsers(query = ''): void {
+    this.userService.getUsers(0, 20, query).subscribe({
       next: (res) => {
         if (res && res.success && res.data) {
           this.users.set(res.data.content);
@@ -82,9 +94,20 @@ export class AdminDashboardComponent implements OnInit {
         }
       },
       error: () => {
-        // Real empty state if users table is unreachable
         this.users.set([]);
         this.totalUsers.set(0);
+      }
+    });
+  }
+
+  onUserSearch(query: string): void {
+    this.loadUsers(query);
+  }
+
+  onToggleUserStatus(event: { id: number; isActive: boolean }): void {
+    this.userService.setUserStatus(event.id, event.isActive).subscribe({
+      next: () => {
+        this.loadUsers();
       }
     });
   }
