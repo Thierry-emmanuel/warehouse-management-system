@@ -1,0 +1,39 @@
+<div class="warehouses-page">
+  <!-- Top Bar -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">FACILITY SPATIAL DIGITAL TWIN • WH-MAIN-01</span>
+      </div>
+      <h1 class="page-title">Warehouse Topology & High-Bay Spatial Layout</h1>
+      <p class="page-subtitle">6-Tier Physical Hierarchy: Warehouse ➔ Zone ➔ Aisle ➔ Rack ➔ Shelf ➔ Bin</p>
+    </div>
+  </div>
+
+  <!-- Zone Cards Grid -->
+  <div class="zones-grid">
+    @for (z of zones; track z.code) {
+      <div
+        class="zone-card"
+        [class.active]="activeZone() === z.code"
+        (click)="selectZone(z.code)"
+      >
+        <div class="zone-card-header">
+          <span class="zone-code font-mono">{{ z.code }}</span>
+          <span class="badge {{ z.occupancyPercent > 80 ? 'badge-danger' : 'badge-primary' }}">
+            {{ z.occupancyPercent }}% Fill
+          </span>
+        </div>
+        <h4 class="zone-name">{{ z.name }}</h4>
+        <div class="zone-details">
+          <span class="detail-pill font-mono">{{ z.tempRange }}</span>
+          <span class="detail-pill font-mono">{{ z.aisleCount }} Aisles / {{ z.rackCount }} Racks</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Interactive High-Bay Visualizer -->
+  <app-admin-rack-visualizer></app-admin-rack-visualizer>
+</div>

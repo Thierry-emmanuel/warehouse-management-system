@@ -1,0 +1,62 @@
+.ledger-card {
+  margin-top: 1.5rem;
+}
+
+.card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.card-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.bin-tag {
+  font-size: 0.75rem;
+  background-color: var(--canvas-bg);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.operator-tag {
+  font-size: 0.75rem;
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.ref-tag {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.qty-bold {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem !important;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-bold {
+  font-weight: 700;
+}

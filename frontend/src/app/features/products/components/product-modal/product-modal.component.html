@@ -1,0 +1,73 @@
+@if (isOpen) {
+  <div class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">Provision Master SKU</h2>
+        <button class="modal-close-btn" (click)="onCancel()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="sku">SKU Code *</label>
+            <input type="text" id="sku" class="form-input font-mono" placeholder="e.g. SENS-IND-99" [(ngModel)]="productData.sku" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="barcode">Barcode *</label>
+            <input type="text" id="barcode" class="form-input font-mono" placeholder="e.g. 8901234567890" [(ngModel)]="productData.barcode" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="name">Product Name *</label>
+          <input type="text" id="name" class="form-input" placeholder="e.g. Industrial Vibration Sensor" [(ngModel)]="productData.name" />
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="categoryId">Category Classification *</label>
+            <select id="categoryId" class="form-input" [(ngModel)]="productData.categoryId">
+              @for (c of categories(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="uom">Unit of Measure (UOM)</label>
+            <select id="uom" class="form-input" [(ngModel)]="productData.unitOfMeasure">
+              <option value="PCS">Pieces (PCS)</option>
+              <option value="BOX">Box Carton (BOX)</option>
+              <option value="PALLET">Industrial Pallet</option>
+              <option value="KG">Kilogram (KG)</option>
+              <option value="LITER">Liquid Liter</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label class="form-label" for="price">Unit Price ($)</label>
+            <input type="number" id="price" class="form-input font-mono" [(ngModel)]="productData.unitPrice" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="weight">Weight (kg)</label>
+            <input type="number" id="weight" class="form-input font-mono" [(ngModel)]="productData.weightKg" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reorder">Reorder Min</label>
+            <input type="number" id="reorder" class="form-input font-mono" [(ngModel)]="productData.minReorderLevel" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+        <button class="btn-primary" (click)="onSave()">Save Master SKU</button>
+      </div>
+    </div>
+  </div>
+}

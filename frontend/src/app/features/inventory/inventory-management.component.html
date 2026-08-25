@@ -1,0 +1,115 @@
+<div class="inventory-page">
+  <!-- Top Bar -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">FACILITY INVENTORY BALANCES • WH-MAIN-01</span>
+      </div>
+      <h1 class="page-title">Live Stock Balances & Bin Allocations</h1>
+      <p class="page-subtitle">Physical inventory with optimistic locking (@Version) and immutable movement auditing</p>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn-secondary" (click)="loadInventoryData()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+        </svg>
+        <span>Refresh Balances</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Metric Overview Cards -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <span class="metric-lbl">Total On Hand</span>
+      <span class="metric-val font-mono">{{ totalOnHand }}</span>
+      <span class="metric-sub">Physical warehouse count</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-lbl">Available Stock</span>
+      <span class="metric-val font-mono text-success">{{ totalAvailable }}</span>
+      <span class="metric-sub">Free for wave reservation</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-lbl">Allocated to Waves</span>
+      <span class="metric-val font-mono text-warning">{{ totalAllocated }}</span>
+      <span class="metric-sub">Committed to active orders</span>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-lbl">Active Storage Bins</span>
+      <span class="metric-val font-mono text-blue">{{ totalBalances() }}</span>
+      <span class="metric-sub">Occupied coordinate cells</span>
+    </div>
+  </div>
+
+  <!-- Spatial High-Bay Rack Visualizer -->
+  <app-admin-rack-visualizer></app-admin-rack-visualizer>
+
+  <!-- Dense Inventory Items Table -->
+  <div class="wms-card">
+    <div class="table-responsive">
+      <table class="wms-table">
+        <thead>
+          <tr>
+            <th>Bin Coordinate</th>
+            <th>SKU Identifier</th>
+            <th>Product Name</th>
+            <th>Batch / Lot</th>
+            <th>Quantity On Hand</th>
+            <th>Allocated</th>
+            <th>Available</th>
+            <th>Lock Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of inventoryItems(); track item.id) {
+            <tr>
+              <td>
+                <span class="font-mono bin-pill">{{ item.locationCode }}</span>
+              </td>
+              <td>
+                <span class="font-mono sku-bold">{{ item.productSku }}</span>
+              </td>
+              <td>
+                <span class="name-text">{{ item.productName }}</span>
+              </td>
+              <td>
+                <span class="font-mono batch-pill">{{ item.batchNumber || 'STANDARD' }}</span>
+              </td>
+              <td>
+                <span class="font-mono font-bold">{{ item.quantityOnHand }} {{ item.unitOfMeasure }}</span>
+              </td>
+              <td>
+                <span class="font-mono text-warning font-bold">{{ item.quantityAllocated }}</span>
+              </td>
+              <td>
+                <span class="font-mono text-success font-bold">{{ item.quantityAvailable }}</span>
+              </td>
+              <td>
+                <span class="font-mono version-tag">v{{ item.version }}</span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="empty-state">
+                @if (isLoading()) {
+                  <span>Querying real inventory items from database...</span>
+                } @else {
+                  <span>No stock records found in this facility.</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Immutable Stock Movement Ledger -->
+  <app-movement-ledger [movements]="movements()" [isLoading]="isLoading()"></app-movement-ledger>
+</div>

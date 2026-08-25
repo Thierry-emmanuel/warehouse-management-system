@@ -1,0 +1,145 @@
+<div class="orders-page">
+  <!-- Top Bar -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">INBOUND & OUTBOUND OPERATIONS</span>
+      </div>
+      <h1 class="page-title">Fulfillment & Dock Order Workflows</h1>
+      <p class="page-subtitle">Supplier PO receiving, quality inspection, directed wave picking, and dispatch manifests</p>
+    </div>
+
+    <!-- Tab Toggle Buttons -->
+    <div class="tab-toggle-group">
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'OUTBOUND'"
+        (click)="switchTab('OUTBOUND')"
+      >
+        Outbound Waves & Picks
+      </button>
+      <button
+        class="tab-btn"
+        [class.active]="activeTab() === 'INBOUND'"
+        (click)="switchTab('INBOUND')"
+      >
+        Inbound Dock POs
+      </button>
+    </div>
+  </div>
+
+  @if (activeTab() === 'OUTBOUND') {
+    <!-- Outbound Pick Tasks Table -->
+    <div class="wms-card">
+      <div class="table-responsive">
+        <table class="wms-table">
+          <thead>
+            <tr>
+              <th>Task Code</th>
+              <th>Sales Order</th>
+              <th>SKU</th>
+              <th>Product Name</th>
+              <th>Bin Location</th>
+              <th>Target Qty</th>
+              <th>Picked</th>
+              <th>Status</th>
+              <th class="text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of pickTasks(); track t.id) {
+              <tr>
+                <td>
+                  <span class="font-mono task-pill">{{ t.taskCode }}</span>
+                </td>
+                <td>
+                  <span class="font-mono order-pill">{{ t.orderNumber || 'SO-1092' }}</span>
+                </td>
+                <td>
+                  <span class="font-mono sku-bold">{{ t.sku }}</span>
+                </td>
+                <td>
+                  <span class="name-text">{{ t.productName }}</span>
+                </td>
+                <td>
+                  <span class="font-mono bin-pill">{{ t.binLocation }}</span>
+                </td>
+                <td>
+                  <span class="font-mono">{{ t.targetQuantity }}</span>
+                </td>
+                <td>
+                  <span class="font-mono text-success">{{ t.pickedQuantity }}</span>
+                </td>
+                <td>
+                  <span class="badge {{ t.status === 'COMPLETED' ? 'badge-success' : 'badge-primary' }}">
+                    {{ t.status }}
+                  </span>
+                </td>
+                <td class="text-right">
+                  @if (t.status !== 'COMPLETED') {
+                    <button class="btn-pick-action" (click)="confirmPick(t.id)">Confirm Pick</button>
+                  } @else {
+                    <span class="badge badge-success">Done</span>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="9" class="empty-state">
+                  @if (isLoading()) {
+                    <span>Loading directed pick tasks from database...</span>
+                  } @else {
+                    <span>No active pick missions currently pending.</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  } @else {
+    <!-- Inbound Purchase Orders Table -->
+    <div class="wms-card">
+      <div class="table-responsive">
+        <table class="wms-table">
+          <thead>
+            <tr>
+              <th>PO Number</th>
+              <th>Supplier Partner</th>
+              <th>Items Count</th>
+              <th>Assigned Dock Bay</th>
+              <th>Expected Arrival</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (po of purchaseOrders; track po.poNumber) {
+              <tr>
+                <td>
+                  <span class="font-mono task-pill">{{ po.poNumber }}</span>
+                </td>
+                <td>
+                  <span class="name-text font-bold">{{ po.supplier }}</span>
+                </td>
+                <td>
+                  <span class="font-mono">{{ po.itemsCount }} SKUs</span>
+                </td>
+                <td>
+                  <span class="font-mono bin-pill">{{ po.dockBay }}</span>
+                </td>
+                <td>
+                  <span class="font-mono text-muted">{{ po.expectedDate }}</span>
+                </td>
+                <td>
+                  <span class="badge badge-primary">{{ po.status }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>

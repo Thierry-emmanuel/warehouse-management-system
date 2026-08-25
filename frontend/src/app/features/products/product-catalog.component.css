@@ -1,0 +1,138 @@
+.products-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.page-top-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.top-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.facility-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-blue-light);
+  border: 1px solid var(--primary-blue-border);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.live-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--primary-blue);
+}
+
+.facility-id {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  letter-spacing: 0.05em;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0 0.75rem;
+  height: 38px;
+  gap: 0.5rem;
+}
+
+.search-svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  font-size: 0.8125rem;
+  color: var(--text-main);
+  width: 200px;
+}
+
+.sku-pill {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+.product-name-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-main {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.desc-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.barcode-pill {
+  font-size: 0.75rem;
+  background-color: var(--canvas-bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.price-text {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.reorder-text {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2.5rem !important;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}

@@ -8,6 +8,10 @@ import { EmployeeDashboardComponent } from './features/dashboard/employee/employ
 import { UserManagementComponent } from './features/users/user-management.component';
 import { RoleManagementComponent } from './features/roles/role-management.component';
 import { CategoryManagementComponent } from './features/categories/category-management.component';
+import { ProductCatalogComponent } from './features/products/product-catalog.component';
+import { InventoryManagementComponent } from './features/inventory/inventory-management.component';
+import { WarehouseSpatialComponent } from './features/warehouses/warehouse-spatial.component';
+import { OrderManagementComponent } from './features/orders/order-management.component';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { dashboardRedirectGuard } from './core/guards/dashboard-redirect.guard';
@@ -60,6 +64,34 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['ROLE_EMPLOYEE', 'ROLE_SUPERVISOR', 'ROLE_MANAGER', 'ROLE_ADMIN'] },
         title: 'LogistiQ — My Dedicated Floor Dashboard'
+      },
+      {
+        path: 'inventory',
+        component: InventoryManagementComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE'] },
+        title: 'LogistiQ — Live Inventory Balances'
+      },
+      {
+        path: 'warehouses',
+        component: WarehouseSpatialComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER'] },
+        title: 'LogistiQ — Warehouse Spatial Topology'
+      },
+      {
+        path: 'products',
+        component: ProductCatalogComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER'] },
+        title: 'LogistiQ — Master SKU Catalog'
+      },
+      {
+        path: 'orders',
+        component: OrderManagementComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['ROLE_ADMIN', 'ROLE_MANAGER', 'ROLE_EMPLOYEE'] },
+        title: 'LogistiQ — Fulfillment & Dock Orders'
       },
       {
         path: 'users',

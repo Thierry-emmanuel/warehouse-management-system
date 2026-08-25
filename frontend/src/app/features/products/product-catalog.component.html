@@ -1,0 +1,108 @@
+<div class="products-page">
+  <!-- Top Bar -->
+  <div class="page-top-bar">
+    <div class="top-titles">
+      <div class="facility-context-pill">
+        <span class="live-pulse-dot"></span>
+        <span class="facility-id">CENTRAL MASTER SKU CATALOG</span>
+      </div>
+      <h1 class="page-title">Product Master & Barcode Directory</h1>
+      <p class="page-subtitle">Standardized item dimensions, UOM conversions, and reorder safety thresholds</p>
+    </div>
+
+    <div class="top-actions">
+      <div class="search-box">
+        <svg class="search-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Filter by SKU or Barcode..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearch()"
+        />
+      </div>
+
+      <button class="btn-primary" (click)="openCreateModal()">
+        <svg class="btn-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        <span>+ Provision Master SKU</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Master SKU Dense Table -->
+  <div class="wms-card">
+    <div class="table-responsive">
+      <table class="wms-table">
+        <thead>
+          <tr>
+            <th>SKU Identifier</th>
+            <th>Product Name</th>
+            <th>Barcode (EAN/UPC)</th>
+            <th>Category</th>
+            <th>UOM</th>
+            <th>Unit Price</th>
+            <th>Safety Stock</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of products(); track p.id) {
+            <tr>
+              <td>
+                <span class="font-mono sku-pill">{{ p.sku }}</span>
+              </td>
+              <td>
+                <div class="product-name-cell">
+                  <span class="name-main">{{ p.name }}</span>
+                  @if (p.description) {
+                    <span class="desc-sub">{{ p.description }}</span>
+                  }
+                </div>
+              </td>
+              <td>
+                <span class="font-mono barcode-pill">{{ p.barcode }}</span>
+              </td>
+              <td>
+                <span class="badge badge-secondary">{{ p.categoryName || 'General' }}</span>
+              </td>
+              <td>
+                <span class="badge badge-neutral font-mono">{{ p.unitOfMeasure }}</span>
+              </td>
+              <td>
+                <span class="font-mono price-text">${{ p.unitPrice }}</span>
+              </td>
+              <td>
+                <span class="font-mono reorder-text">{{ p.minReorderLevel }} min / {{ p.safetyStock }} safe</span>
+              </td>
+              <td>
+                <span class="badge {{ p.isActive ? 'badge-success' : 'badge-danger' }}">
+                  {{ p.isActive ? 'Active' : 'Archived' }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="8" class="empty-state">
+                @if (isLoading()) {
+                  <span>Loading master SKUs from database...</span>
+                } @else {
+                  <span>No products found matching criteria.</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <app-product-modal
+    [isOpen]="isModalOpen()"
+    (close)="closeModal()"
+    (save)="handleSaveProduct($event)"
+  ></app-product-modal>
+</div>

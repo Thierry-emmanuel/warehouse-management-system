@@ -1,0 +1,66 @@
+<div class="wms-card ledger-card">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Immutable Stock Movement Ledger (Audit Trail)</h3>
+      <p class="card-subtitle">Append-only audit trail of inbound receipts, putaways, wave picks, and bin transfers</p>
+    </div>
+    <span class="badge badge-primary font-mono">{{ movements.length }} Logged Records</span>
+  </div>
+
+  <div class="table-responsive">
+    <table class="wms-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Movement Type</th>
+          <th>SKU Identifier</th>
+          <th>Source Bin</th>
+          <th>Destination Bin</th>
+          <th>Quantity</th>
+          <th>Operator</th>
+          <th>Reference</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (m of movements; track m.id) {
+          <tr>
+            <td>
+              <span class="font-mono text-muted">{{ m.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+            </td>
+            <td>
+              <span class="badge badge-primary font-mono">{{ m.movementType }}</span>
+            </td>
+            <td>
+              <span class="font-mono font-bold">{{ m.productSku }}</span>
+            </td>
+            <td>
+              <span class="font-mono bin-tag">{{ m.sourceLocationCode || 'DOCK_INBOUND' }}</span>
+            </td>
+            <td>
+              <span class="font-mono bin-tag">{{ m.destinationLocationCode || 'DISPATCH_BAY' }}</span>
+            </td>
+            <td>
+              <span class="font-mono qty-bold">{{ m.quantity }}</span>
+            </td>
+            <td>
+              <span class="font-mono operator-tag">&#64;{{ m.operatorUsername }}</span>
+            </td>
+            <td>
+              <span class="font-mono ref-tag">{{ m.referenceId || 'N/A' }}</span>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="empty-state">
+              @if (isLoading) {
+                <span>Retrieving immutable transaction ledger from database...</span>
+              } @else {
+                <span>No stock movement records found for this facility.</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
