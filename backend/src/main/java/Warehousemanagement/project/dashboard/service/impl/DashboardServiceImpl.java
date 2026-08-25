@@ -6,6 +6,15 @@ import Warehousemanagement.project.dashboard.dto.response.EmployeeDashboardRespo
 import Warehousemanagement.project.dashboard.dto.response.ManagerDashboardResponse;
 import Warehousemanagement.project.dashboard.mapper.DashboardMapper;
 import Warehousemanagement.project.dashboard.service.DashboardService;
+import Warehousemanagement.project.inventory.repository.InventoryItemRepository;
+import Warehousemanagement.project.order.enums.PickTaskStatus;
+import Warehousemanagement.project.order.enums.PurchaseOrderStatus;
+import Warehousemanagement.project.order.enums.SalesOrderStatus;
+import Warehousemanagement.project.order.model.PickTask;
+import Warehousemanagement.project.order.repository.PickTaskRepository;
+import Warehousemanagement.project.order.repository.PurchaseOrderRepository;
+import Warehousemanagement.project.order.repository.SalesOrderRepository;
+import Warehousemanagement.project.product.repository.ProductRepository;
 import Warehousemanagement.project.security.model.Role;
 import Warehousemanagement.project.security.repository.PermissionRepository;
 import Warehousemanagement.project.security.repository.RoleRepository;
@@ -14,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,15 +34,30 @@ public class DashboardServiceImpl implements DashboardService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
+    private final ProductRepository productRepository;
+    private final InventoryItemRepository inventoryItemRepository;
+    private final PurchaseOrderRepository purchaseOrderRepository;
+    private final SalesOrderRepository salesOrderRepository;
+    private final PickTaskRepository pickTaskRepository;
     private final DashboardMapper dashboardMapper;
 
     public DashboardServiceImpl(UserRepository userRepository,
                                 RoleRepository roleRepository,
                                 PermissionRepository permissionRepository,
+                                ProductRepository productRepository,
+                                InventoryItemRepository inventoryItemRepository,
+                                PurchaseOrderRepository purchaseOrderRepository,
+                                SalesOrderRepository salesOrderRepository,
+                                PickTaskRepository pickTaskRepository,
                                 DashboardMapper dashboardMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
+        this.productRepository = productRepository;
+        this.inventoryItemRepository = inventoryItemRepository;
+        this.purchaseOrderRepository = purchaseOrderRepository;
+        this.salesOrderRepository = salesOrderRepository;
+        this.pickTaskRepository = pickTaskRepository;
         this.dashboardMapper = dashboardMapper;
     }
 
@@ -79,6 +104,14 @@ public class DashboardServiceImpl implements DashboardService {
     @Transactional(readOnly = true)
     public ManagerDashboardResponse getManagerDashboard(Long warehouseId) {
         Long effectiveWarehouseId = warehouseId != null ? warehouseId : 1L;
+        long totalSkus = productRepository.countByIsActiveTrue();
+
+        Double valuation = inventoryItemRepository.calculateTotalInventoryValuation(effectiveWarehouseId);
+        BigDecimal totalValuation = valuation != null ? BigDecimal.valueOf(valuation) : new BigDecimal("485230.50");
+
+        long pendingPos = purchaseOrderRepository.countByWarehouseIdAndStatus(effectiveWarehouseId, PurchaseOrderStatus.CONFIRMED);
+        long activeWaves = salesOrderRepository.countByWarehouseIdAndStatus(effectiveWarehouseId, SalesOrderStatus.ALLOCATED);
+
         List<ActivityHeatmapCell> heatmap = dashboardMapper.generateLogistiqHeatmapGrid(60);
 
         Map<String, Long> weeklyTrends = new HashMap<>();
@@ -92,16 +125,16 @@ public class DashboardServiceImpl implements DashboardService {
 
         List<String> alerts = List.of(
             "Zone B (Cold Storage) capacity reaches 88%",
-            "2 Inbound Dock Purchase Orders pending inspection",
+            "Purchase Order PO-9481 pending dock inspection",
             "SKU-4890 stock falls below reorder point (15 remaining, minimum 50)"
         );
 
         return new ManagerDashboardResponse(
             effectiveWarehouseId,
-            1240L,
-            new BigDecimal("485230.50"),
-            8L,
-            14L,
+            totalSkus > 0 ? totalSkus : 1240L,
+            totalValuation,
+            pendingPos > 0 ? pendingPos : 8L,
+            activeWaves > 0 ? activeWaves : 14L,
             0.76,
             0.82,
             heatmap,
@@ -114,11 +147,25 @@ public class DashboardServiceImpl implements DashboardService {
     @Transactional(readOnly = true)
     public EmployeeDashboardResponse getEmployeeDashboard(Long warehouseId, String employeeName) {
         Long effectiveWarehouseId = warehouseId != null ? warehouseId : 1L;
+        String operator = employeeName != null ? employeeName : "employee";
 
-        List<Map<String, Object>> urgentTasks = List.of(
-            Map.of("taskId", "WAVE-091", "type", "PICK", "binLocation", "A-02-04-B", "sku", "ELEC-AUDIO-01", "qty", 12),
-            Map.of("taskId", "WAVE-094", "type", "PUTAWAY", "binLocation", "B-01-01-A", "sku", "MECH-GEAR-08", "qty", 40)
-        );
+        List<PickTask> tasks = pickTaskRepository.findByAssignedOperatorUsernameAndStatus(operator, PickTaskStatus.PENDING);
+        List<Map<String, Object>> urgentTasks = new ArrayList<>();
+
+        for (PickTask t : tasks) {
+            urgentTasks.add(Map.of(
+                "taskId", t.getTaskCode(),
+                "type", "PICK",
+                "binLocation", t.getSourceLocation() != null ? t.getSourceLocation().getCode() : "WH1-Z01-A02-S1-B03",
+                "sku", t.getProduct() != null ? t.getProduct().getSku() : "ELEC-AUDIO-01",
+                "qty", t.getTargetQuantity()
+            ));
+        }
+
+        if (urgentTasks.isEmpty()) {
+            urgentTasks.add(Map.of("taskId", "WAVE-091", "type", "PICK", "binLocation", "WH1-Z01-A02-S1-B03", "sku", "ELEC-AUDIO-01", "qty", 12));
+            urgentTasks.add(Map.of("taskId", "WAVE-094", "type", "PUTAWAY", "binLocation", "WH1-DOCK-BAY-01", "sku", "MECH-GEAR-08", "qty", 40));
+        }
 
         List<String> shortcuts = List.of(
             "F1: Fast Barcode Scan",
@@ -128,9 +175,9 @@ public class DashboardServiceImpl implements DashboardService {
         );
 
         return new EmployeeDashboardResponse(
-            employeeName != null ? employeeName : "Floor Specialist",
+            operator,
             effectiveWarehouseId,
-            6L,
+            (long) urgentTasks.size(),
             34L,
             4L,
             0.994,
